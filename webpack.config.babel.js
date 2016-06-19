@@ -8,15 +8,14 @@ const bannerTemplate = [
   `Author: ${pkg.author}`
 ].join('\n');
 
-var production = (process.argv.indexOf('-p') !== -1);
-var plugins = [
-  new optimize.DedupePlugin(),
-  new BannerPlugin(bannerTemplate)
-];
+var production = (process.argv.indexOf('-p') !== -1),
+  plugins = [
+    new optimize.DedupePlugin(),
+    new BannerPlugin(bannerTemplate)
+  ],
+  entry = [path.join(__dirname, 'src/mi18n.js')];
 
 if (production) {
-  plugins
-} else {
   plugins.push(
     new DefinePlugin({
       'process.env': {
@@ -28,17 +27,12 @@ if (production) {
       compress: { warnings: false }
     })
   );
+} else {
+  entry.unshift('webpack/hot/dev-server', 'webpack-dev-server/client?http://localhost:8080');
 }
 
 var webpackConfig = {
-  entry: [
-    // For hot style updates
-    'webpack/hot/dev-server',
-
-    // The script refreshing the browser on none hot updates
-    'webpack-dev-server/client?http://localhost:8080',
-    path.join(__dirname, 'src/mi18n.js')
-  ],
+  entry: entry,
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: 'dist/',

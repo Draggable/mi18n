@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run test",
+    "build": "webpack --progress -p --colors",
     "dev": "webpack -d | webpack-dev-server -d --hot --inline --progress"
   },
   "repository": {
