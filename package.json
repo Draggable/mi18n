@@ -1,6 +1,6 @@
 {
   "name": "mi18n",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple yet robust i18n solution for isomorphic apps.",
   "main": "dist/index.js",
   "scripts": {
