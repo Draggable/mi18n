@@ -28,7 +28,7 @@ if (production) {
     })
   );
 } else {
-  entry.unshift('webpack/hot/dev-server', 'webpack-dev-server/client?http://localhost:8080');
+  entry.unshift('webpack/hot/dev-server', 'webpack-dev-server/client?http://localhost:6060');
 }
 
 var webpackConfig = {
@@ -36,7 +36,10 @@ var webpackConfig = {
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: 'dist/',
-    filename: 'index.js'
+    filename: 'mi18n.js',
+    library: 'mi18n',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
     preLoaders: [{
