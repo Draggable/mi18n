@@ -1,0 +1,64 @@
+{
+  "name": "mi18n",
+  "version": "0.1.0",
+  "description": "A simple yet robust i18n solution for isomorphic apps.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test",
+    "dev": "webpack -d | webpack-dev-server -d --hot --inline --progress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Draggable/mi18n.git"
+  },
+  "keywords": [
+    "i18n"
+  ],
+  "author": "Kevin Chappell <kevin.b.chappell@gmail.com> (http://kevin-chappell.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Draggable/mi18n/issues"
+  },
+  "homepage": "https://github.com/Draggable/mi18n#readme",
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-register": "^6.9.0",
+    "chai": "^3.5.0",
+    "eslint": "^2.8.0",
+    "mocha": "^2.4.5",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "rules": {
+      "no-console": 0,
+      "new-cap": 0,
+      "strict": 0,
+      "no-underscore-dangle": 0,
+      "no-use-before-define": 0,
+      "eol-last": 0,
+      "quotes": [
+        2,
+        "single"
+      ]
+    }
+  }
+}
