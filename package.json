@@ -2,11 +2,12 @@
   "name": "mi18n",
   "version": "0.1.0",
   "description": "A simple yet robust i18n solution for isomorphic apps.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "npm run test",
     "build": "webpack --progress -p --colors",
-    "dev": "webpack -d | webpack-dev-server -d --hot --inline --progress"
+    "dev": "webpack -d | webpack-dev-server -d --hot --inline --progress",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
