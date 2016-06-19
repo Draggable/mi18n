@@ -46,6 +46,16 @@ class I18N {
   }
 
   /**
+   * Temporarily put a string into the currently loaded language
+   * @param  {string} key
+   * @param  {string} string
+   * @return {string}
+   */
+  put(key, string) {
+    return this.langs[this.current][key] = string;
+  }
+
+  /**
    * Parse arguments for the requested string
    * @param  {string} key  the key we use to lookup our translation
    * @param  {multi}  args  string, number or object containing our arguments
