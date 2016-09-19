@@ -2,24 +2,26 @@ class I18N {
   constructor() {
     var defaultConfig = {
         // local or remote directory containing language files
-        langsDir: 'assets/lang/',
-        // locale property should match language filenames
+        location: 'assets/lang/',
+        // list of available locales, handy for populating selector.
         langs: [
           'en-US',
           'es-ES'
-        ]
+        ],
+        default: 'en-US', // fallback locale
+        current: 'en-US', // init with user's preferred language
+        preloaded: {}
       },
       _this = this;
 
     this.init = function(options) {
       _this.config = Object.assign({}, defaultConfig, options);
 
-      _this.langs = {};
-      _this.default = _this.config.langs[0];
-      _this.current = _this.config.langs[0];
-      _this.loaded = [];
+      _this.langs = Object.assign({}, this.config.preloaded);
+      _this.default = _this.config.default || _this.config.langs[0];
+      _this.current = _this.config.current || _this.config.default || _this.config.langs[0];
 
-      return _this.loadLang(_this.current);
+      return _this.setCurrent(_this.current);
     };
 
   }
@@ -101,42 +103,37 @@ class I18N {
 
   processFile(response) {
     let _this = this,
-      rawText = response.replace(/\n\n/g, '\n'),
-      json = _this.fromFile(rawText),
-      locale = _this.current;
-
-    if (!_this.langs[locale]) {
-      _this.langs[locale] = json;
-      _this.loaded.push(locale);
-    }
-
+      rawText = response.replace(/\n\n/g, '\n');
+    return _this.langs[_this.current] = _this.fromFile(rawText);
   }
 
   loadLang(locale) {
     let _this = this;
     return new window.Promise(function(resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', _this.config.langsDir + locale, true);
-      xhr.onload = function() {
-        if (this.status >= 200 && this.status < 300) {
-          _this.setCurrent(locale);
-          _this.processFile(xhr.responseText);
-
-          resolve(xhr.response);
-        } else {
+      if (_this.langs[_this.current]) {
+        resolve(_this.langs[_this.current]);
+      } else {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', _this.config.location + locale + '.lang', true);
+        xhr.onload = function() {
+          if (this.status <= 304) {
+            _this.processFile(xhr.responseText);
+            resolve(xhr.response);
+          } else {
+            reject({
+              status: this.status,
+              statusText: xhr.statusText
+            });
+          }
+        };
+        xhr.onerror = function() {
           reject({
             status: this.status,
             statusText: xhr.statusText
           });
-        }
-      };
-      xhr.onerror = function() {
-        reject({
-          status: this.status,
-          statusText: xhr.statusText
-        });
-      };
-      xhr.send();
+        };
+        xhr.send();
+      }
     });
   }
 
@@ -153,9 +150,11 @@ class I18N {
    * @param {string}   locale
    */
   setCurrent(locale = 'en-US') {
-    let current = locale || this.current;
     this.current = locale;
-    window.sessionStorage.setItem('locale', current);
+    let lang = this.loadLang(locale);
+
+    window.sessionStorage.setItem('locale', locale);
+    return lang;
   }
 
 }
