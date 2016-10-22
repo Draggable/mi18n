@@ -19,7 +19,7 @@ import json from 'json-update';
 function updateMd(version) {
   const lastLog = fs.readFileSync('./CHANGELOG.md', 'utf8').split('\n')[2];
   return exec('git log -1 HEAD --pretty=format:%s', function(err, gitLog) {
-    gitLog = gitLog.replace(/\(#(\d+)\)/g, `[#$1](${pkg.repository.url}/$1)`);
+    gitLog = gitLog.replace(/\(#(\d+)\)/g, `[#$1](${pkg.repository.url}/pulls/$1)`);
     const changes = [
       {
         files: 'CHANGELOG.md',
@@ -56,7 +56,6 @@ async function tag() {
   };
 
   await updateMd(version);
-
   await json.update('bower.json', {version: version.new});
   return json.update('package.json', {version: version.new})
   .then(() => {
