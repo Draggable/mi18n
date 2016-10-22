@@ -1,6 +1,6 @@
 import pkg from './package.json';
 import path from 'path';
-import { optimize, BannerPlugin, DefinePlugin } from 'webpack';
+import {optimize, BannerPlugin, DefinePlugin} from 'webpack';
 
 const bannerTemplate = [
   `${pkg.name} - ${pkg.homepage}`,
@@ -8,38 +8,37 @@ const bannerTemplate = [
   `Author: ${pkg.author}`
 ].join('\n');
 
-var production = (process.argv.indexOf('-p') !== -1),
-  plugins = [
-    new optimize.DedupePlugin(),
-    new BannerPlugin(bannerTemplate)
-  ],
-  entry = [path.join(__dirname, 'src/mi18n.js')];
+const development = (process.argv.indexOf('-d') !== -1);
+let plugins = [
+  new optimize.DedupePlugin(),
+  new optimize.OccurenceOrderPlugin(),
+  new optimize.UglifyJsPlugin({
+    compress: {warnings: false}
+  }),
+  new BannerPlugin(bannerTemplate)
+];
 
-if (production) {
-  plugins.push(
+if (!development) {
+ plugins.push(
     new DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
-    }),
-    new optimize.OccurenceOrderPlugin(),
-    new optimize.UglifyJsPlugin({
-      compress: { warnings: false }
     })
   );
-} else {
-  entry.unshift('webpack/hot/dev-server', 'webpack-dev-server/client?http://localhost:6060');
 }
 
-var webpackConfig = {
-  entry: entry,
+const webpackConfig = {
+  context: path.join(__dirname, 'dist'),
+  entry: {
+    mi18n: path.join(__dirname, 'src/mi18n.js')
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: 'dist/',
-    filename: 'mi18n.js',
     library: 'mi18n',
-    libraryTarget: 'umd',
-    umdNamedDefine: true
+    libraryTarget: 'commonjs2',
+    filename: '[name].min.js'
   },
   module: {
     preLoaders: [{
@@ -52,17 +51,24 @@ var webpackConfig = {
       exclude: /node_modules/,
       loader: 'babel',
       query: {
-        presets: ['es2015'],
+        presets: ['es2015', 'stage-3'],
         plugins: ['transform-runtime']
       }
     }]
   },
-  // devtool: 'source-map',
-  plugins: plugins,
+  plugins,
   resolve: {
     root: path.join(__dirname, 'src'),
     extensions: ['', '.js'],
     modulesDirectories: ['src', 'node_modules']
+  },
+  devServer: {
+    hot: true,
+    contentBase: 'demo/',
+    progress: true,
+    colors: true,
+    noInfo: true,
+    outputPath: path.join(__dirname, './dist')
   }
 };
 

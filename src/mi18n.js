@@ -1,6 +1,13 @@
+/**
+ * Main mi18n class.
+ */
 class I18N {
+  /**
+   * Process options and start the module
+   * @param {Object} options
+   */
   constructor() {
-    var defaultConfig = {
+    let defaultConfig = {
         // local or remote directory containing language files
         location: 'assets/lang/',
         // list of available locales, handy for populating selector.
@@ -8,72 +15,80 @@ class I18N {
           'en-US',
           'es-ES'
         ],
-        default: 'en-US', // fallback locale
-        current: 'en-US', // init with user's preferred language
+        locale: 'en-US', // init with user's preferred language
         preloaded: {}
-      },
-      _this = this;
+      };
+    let _this = this;
 
-    this.init = function(options) {
+    /**
+     * Load language and set default
+     * @param  {Object} options
+     * @return {Promise}        resolves language
+     */
+    _this.init = options => {
       _this.config = Object.assign({}, defaultConfig, options);
 
-      _this.langs = Object.assign({}, this.config.preloaded);
-      _this.default = _this.config.default || _this.config.langs[0];
-      _this.current = _this.config.current || _this.config.default || _this.config.langs[0];
+      _this.langs = Object.assign({}, _this.config.preloaded);
+      _this.locale = _this.config.locale || _this.config.langs[0];
 
-      return _this.setCurrent(_this.current);
+      return _this.setCurrent(_this.locale);
     };
-
   }
+
 
   /**
    * get a string from a loaded language file
-   * @param  {string} key  - the key for the string we are trying to retrieve
-   * @return {string}      - correct language string
+   * @param  {String} key  - the key for the string we are trying to retrieve
+   * @return {String}      - correct language string
    */
   getValue(key) {
-    var string = (this.langs[this.current] && this.langs[this.current][key]) || (this.langs[this.default] && this.langs[this.default][key]) || key;
-    return string;
+    return (this.current && this.current[key]) || key;
   }
 
+  /**
+   * Escape variable syntax
+   * @param  {String} str
+   * @return {String}     escaped str
+   */
   makeSafe(str) {
-    var mapObj = {
+    const mapObj = {
       '{': '\\{',
       '}': '\\}',
       '|': '\\|'
     };
-    return str.replace(/\{|\}|\|/g, function(matched) {
-      return mapObj[matched];
-    });
+
+    str = str.replace(/\{|\}|\|/g, matched => mapObj[matched]);
+
+    return new RegExp(str, 'g');
   }
 
   /**
-   * Temporarily put a string into the currently loaded language
-   * @param  {string} key
-   * @param  {string} string
-   * @return {string}
-   */
+  * Temporarily put a string into the currently loaded language
+  * @param  {String} key
+  * @param  {String} string
+  * @return {String} string in current language
+  */
   put(key, string) {
-    return this.langs[this.current][key] = string;
+    return this.current[key] = string;
   }
 
   /**
    * Parse arguments for the requested string
-   * @param  {string} key  the key we use to lookup our translation
+   * @param  {String} key  the key we use to lookup our translation
    * @param  {multi}  args  string, number or object containing our arguments
-   * @return {string}      updated string translation
+   * @return {String}      updated string translation
    */
   get(key, args) {
-    var _this = this,
-      value = this.getValue(key),
-      tokens = value.match(/\{[^\}]+?\}/g),
-      token;
+    let _this = this;
+    let value = this.getValue(key);
+    let tokens = value.match(/\{[^\}]+?\}/g);
+    let token;
 
     if (args && tokens) {
       if ('object' === typeof args) {
-        for (var i = 0; i < tokens.length; i++) {
+        for (let i = 0; i < tokens.length; i++) {
           token = tokens[i].substring(1, tokens[i].length - 1);
-          value = value.replace(new RegExp(_this.makeSafe(tokens[i]), 'g'), args[token] || '');
+          value = value.replace(_this.makeSafe(tokens[i]), args[token] || '');
         }
       } else {
         value = value.replace(/\{[^\}]+?\}/g, args);
@@ -85,35 +100,47 @@ class I18N {
 
   /**
    * Turn raw text from the language files into fancy JSON
-   * @param  {string} rawText
-   * @return {object}
+   * @param  {String} rawText
+   * @return {Object} converted language file
    */
   fromFile(rawText) {
-    var lines = rawText.split('\n'),
-      json = {};
+    const lines = rawText.split('\n');
+    let lang = {};
+
     for (let matches, i = 0; i < lines.length; i++) {
       matches = lines[i].match(/^(.+?) *?= *?([^\n]+)/);
       if (matches) {
-        json[matches[1]] = matches[2].replace(/^\s+|\s+$/, '');
+        lang[matches[1]] = matches[2].replace(/^\s+|\s+$/, '');
       }
     }
 
-    return json;
+    return lang;
   }
 
+  /**
+   * Remove double carriage returns
+   * @param  {Object} response
+   * @return {Object}          processed language
+   */
   processFile(response) {
-    let _this = this,
-      rawText = response.replace(/\n\n/g, '\n');
-    return _this.langs[_this.current] = _this.fromFile(rawText);
+    let _this = this;
+    let rawText = response.replace(/\n\n/g, '\n');
+
+    return _this.langs[_this.locale] = _this.fromFile(rawText);
   }
 
+  /**
+   * Load a remotely stored language file
+   * @param  {String} locale
+   * @return {Promise}       resolves response
+   */
   loadLang(locale) {
     let _this = this;
     return new window.Promise(function(resolve, reject) {
-      if (_this.langs[_this.current]) {
-        resolve(_this.langs[_this.current]);
+      if (_this.langs[_this.locale]) {
+        resolve(_this.langs[_this.locale]);
       } else {
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('GET', _this.config.location + locale + '.lang', true);
         xhr.onload = function() {
           if (this.status <= 304) {
@@ -139,19 +166,21 @@ class I18N {
 
   /**
    * return currently available languages
-   * @return {object}
+   * @return {Object} all configured languages
    */
   get getLangs() {
     return this.config.langs;
   }
 
   /**
-   * attempt to set the current language to the local provided
-   * @param {string}   locale
+   * Attempt to set the current language to the local provided
+   * @param {String}   locale
+   * @return {Promise} language
    */
   setCurrent(locale = 'en-US') {
-    this.current = locale;
     let lang = this.loadLang(locale);
+    this.locale = locale;
+    this.current = this.langs[locale];
 
     window.sessionStorage.setItem('locale', locale);
     return lang;
