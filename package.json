@@ -8,7 +8,7 @@
     "build": "webpack --progress -p --colors",
     "start": "webpack -d | webpack-dev-server -d --hot --inline --progress --port 6061",
     "tag": "babel-node tools/run tag",
-    "prepublish": "babel-node tools/run tag"
+    "prepublish": "npm run tag"
   },
   "repository": {
     "url": "http://github.com/draggable/mi18n",
