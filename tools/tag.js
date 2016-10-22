@@ -27,8 +27,8 @@ function updateMd(version) {
         with: `- v${version.new} - ${gitLog}\n${lastLog}`
       }, {
         files: 'README.md',
-        replace: 'Formeo v' + version.current,
-        with: 'Formeo v' + version.new
+        replace: '# mi18n v' + version.current,
+        with: '# mi18n v' + version.new
       }
     ];
 
