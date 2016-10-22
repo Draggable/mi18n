@@ -1,6 +1,6 @@
 {
   "name": "mi18n",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A simple yet robust i18n solution for universal JavaScript apps.",
   "main": "dist/mi18n.min.js",
   "scripts": {
