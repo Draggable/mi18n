@@ -1,4 +1,4 @@
-# mi18n v0.3.2
+# mi18n v0.3.3
 
 Add multi-lingual support to any JavaScript app or module with this light weight package.
 
