@@ -8,6 +8,7 @@ class I18N {
    */
   constructor() {
     let defaultConfig = {
+        extension: '.lang',
         // local or remote directory containing language files
         location: 'assets/lang/',
         // list of available locales, handy for populating selector.
@@ -103,14 +104,15 @@ class I18N {
    * @param  {String} rawText
    * @return {Object} converted language file
    */
-  fromFile(rawText) {
+  async fromFile(rawText) {
     const lines = rawText.split('\n');
     let lang = {};
 
     for (let matches, i = 0; i < lines.length; i++) {
       matches = lines[i].match(/^(.+?) *?= *?([^\n]+)/);
       if (matches) {
-        lang[matches[1]] = matches[2].replace(/^\s+|\s+$/, '');
+        let value = matches[2].replace(/^\s+|\s+$/, '');
+        lang[matches[1]] = value;
       }
     }
 
@@ -122,11 +124,11 @@ class I18N {
    * @param  {Object} response
    * @return {Object}          processed language
    */
-  processFile(response) {
+  async processFile(response) {
     let _this = this;
     let rawText = response.replace(/\n\n/g, '\n');
 
-    return _this.langs[_this.locale] = _this.fromFile(rawText);
+    return _this.langs[_this.locale] = await _this.fromFile(rawText);
   }
 
   /**
@@ -141,11 +143,11 @@ class I18N {
         resolve(_this.langs[_this.locale]);
       } else {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', _this.config.location + locale + '.lang', true);
-        xhr.onload = function() {
+        let langFile = _this.config.location + locale + _this.config.extension;
+        xhr.open('GET', langFile, true);
+        xhr.onload = async function() {
           if (this.status <= 304) {
-            _this.processFile(xhr.responseText);
-            resolve(xhr.response);
+            resolve(await _this.processFile(xhr.responseText));
           } else {
             reject({
               status: this.status,
@@ -177,8 +179,8 @@ class I18N {
    * @param {String}   locale
    * @return {Promise} language
    */
-  setCurrent(locale = 'en-US') {
-    let lang = this.loadLang(locale);
+  async setCurrent(locale = 'en-US') {
+    let lang = await this.loadLang(locale);
     this.locale = locale;
     this.current = this.langs[locale];
 
