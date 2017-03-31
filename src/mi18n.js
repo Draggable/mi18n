@@ -13,8 +13,7 @@ class I18N {
         location: 'assets/lang/',
         // list of available locales, handy for populating selector.
         langs: [
-          'en-US',
-          'es-ES'
+          'en-US'
         ],
         locale: 'en-US', // init with user's preferred language
         preloaded: {}
@@ -104,7 +103,7 @@ class I18N {
    * @param  {String} rawText
    * @return {Object} converted language file
    */
-  async fromFile(rawText) {
+  fromFile(rawText) {
     const lines = rawText.split('\n');
     let lang = {};
 
@@ -124,11 +123,9 @@ class I18N {
    * @param  {Object} response
    * @return {Object}          processed language
    */
-  async processFile(response) {
-    let _this = this;
+  processFile(response) {
     let rawText = response.replace(/\n\n/g, '\n');
-
-    return _this.langs[_this.locale] = await _this.fromFile(rawText);
+    return this.fromFile(rawText);
   }
 
   /**
@@ -139,15 +136,17 @@ class I18N {
   loadLang(locale) {
     let _this = this;
     return new window.Promise(function(resolve, reject) {
-      if (_this.langs[_this.locale]) {
-        resolve(_this.langs[_this.locale]);
+      if (_this.langs[locale]) {
+        resolve(_this.langs[locale]);
       } else {
         let xhr = new XMLHttpRequest();
         let langFile = _this.config.location + locale + _this.config.extension;
         xhr.open('GET', langFile, true);
-        xhr.onload = async function() {
+        xhr.onload = function() {
           if (this.status <= 304) {
-            resolve(await _this.processFile(xhr.responseText));
+            let processedFile = _this.processFile(xhr.responseText);
+            _this.langs[locale] = processedFile;
+            resolve(processedFile);
           } else {
             reject({
               status: this.status,
@@ -180,12 +179,12 @@ class I18N {
    * @return {Promise} language
    */
   async setCurrent(locale = 'en-US') {
-    let lang = await this.loadLang(locale);
+    await this.loadLang(locale);
+
     this.locale = locale;
     this.current = this.langs[locale];
 
-    window.sessionStorage.setItem('locale', locale);
-    return lang;
+    return this.current;
   }
 
 }
