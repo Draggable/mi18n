@@ -8,12 +8,12 @@ class I18N {
    */
   constructor() {
     let defaultConfig = {
+        extension: '.lang',
         // local or remote directory containing language files
         location: 'assets/lang/',
         // list of available locales, handy for populating selector.
         langs: [
-          'en-US',
-          'es-ES'
+          'en-US'
         ],
         locale: 'en-US', // init with user's preferred language
         preloaded: {}
@@ -110,7 +110,8 @@ class I18N {
     for (let matches, i = 0; i < lines.length; i++) {
       matches = lines[i].match(/^(.+?) *?= *?([^\n]+)/);
       if (matches) {
-        lang[matches[1]] = matches[2].replace(/^\s+|\s+$/, '');
+        let value = matches[2].replace(/^\s+|\s+$/, '');
+        lang[matches[1]] = value;
       }
     }
 
@@ -123,10 +124,8 @@ class I18N {
    * @return {Object}          processed language
    */
   processFile(response) {
-    let _this = this;
     let rawText = response.replace(/\n\n/g, '\n');
-
-    return _this.langs[_this.locale] = _this.fromFile(rawText);
+    return this.fromFile(rawText);
   }
 
   /**
@@ -137,15 +136,17 @@ class I18N {
   loadLang(locale) {
     let _this = this;
     return new window.Promise(function(resolve, reject) {
-      if (_this.langs[_this.locale]) {
-        resolve(_this.langs[_this.locale]);
+      if (_this.langs[locale]) {
+        resolve(_this.langs[locale]);
       } else {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', _this.config.location + locale + '.lang', true);
+        let langFile = _this.config.location + locale + _this.config.extension;
+        xhr.open('GET', langFile, true);
         xhr.onload = function() {
           if (this.status <= 304) {
-            _this.processFile(xhr.responseText);
-            resolve(xhr.response);
+            let processedFile = _this.processFile(xhr.responseText);
+            _this.langs[locale] = processedFile;
+            resolve(processedFile);
           } else {
             reject({
               status: this.status,
@@ -177,13 +178,13 @@ class I18N {
    * @param {String}   locale
    * @return {Promise} language
    */
-  setCurrent(locale = 'en-US') {
-    let lang = this.loadLang(locale);
+  async setCurrent(locale = 'en-US') {
+    await this.loadLang(locale);
+
     this.locale = locale;
     this.current = this.langs[locale];
 
-    window.sessionStorage.setItem('locale', locale);
-    return lang;
+    return this.current;
   }
 
 }
