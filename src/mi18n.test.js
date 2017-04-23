@@ -1,6 +1,6 @@
-import 'babel-regenerator-runtime';
-import {expect} from 'chai';
-import mi18n from './mi18n';
+require('babel-regenerator-runtime');
+const {expect} = require('chai');
+const mi18n = require('../dist/mi18n.min.js').default;
 
 describe('I18N', () => {
   const testOpts = {
@@ -11,36 +11,37 @@ describe('I18N', () => {
       }
     }
   };
+
   it('shall exist', () => {
     expect(mi18n).to.exist;
   });
 
-  describe('should have methods', () => {
-    describe('init()', () => {
-      it('shall exist', () =>
-        expect(mi18n.init).to.exist
-      );
-
-      it('shall initialize the module with options', async () => {
-        await mi18n.init(testOpts).then(user => {
-          expect(mi18n).to.have.property('current');
-          expect(mi18n.get).to.exist;
-        });
+  describe('should have methods', async () => {
+    describe('init()', async () => {
+      // const i18n = await new mi18n(testOpts).init(testOpts);
+      it('should exist', () => {
+        expect(mi18n.init).to.exist;
+        expect(typeof mi18n.init).to.equal('function');
+      });
+      it('should set locale', async () => {
+        await new mi18n.init(testOpts);
+        expect(mi18n.config.locale).to.equal('te-ST');
       });
     });
   });
 
-  describe('get()', () => {
-    before(async () => {
-      await mi18n.init(testOpts);
-    });
-    it('shall exist', () =>
-      expect(mi18n.get).to.exist
-    );
+  describe('should have methods after init', async () => {
+    await new mi18n.init(testOpts);
 
-    it('shall return a string', async () => {
-      const str = mi18n.get('testString');
-      expect(str).to.equal('Teeesst');
+    describe('get()', () => {
+      it('shall exist', () =>
+        expect(mi18n.get).to.exist
+      );
+
+      it('shall return a string', async () => {
+        const str = mi18n.get('testString');
+        expect(str).to.equal('Teeesst');
+      });
     });
   });
 });

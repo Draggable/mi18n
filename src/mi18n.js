@@ -1,3 +1,5 @@
+// import 'babel-regenerator-runtime';
+
 /**
  * Main mi18n class.
  */
@@ -6,7 +8,7 @@ class I18N {
    * Process options and start the module
    * @param {Object} options
    */
-  constructor() {
+  constructor(options) {
     let defaultConfig = {
         extension: '.lang',
         // local or remote directory containing language files
@@ -18,20 +20,19 @@ class I18N {
         locale: 'en-US', // init with user's preferred language
         preloaded: {}
       };
-    let _this = this;
 
     /**
      * Load language and set default
      * @param  {Object} options
      * @return {Promise}        resolves language
      */
-    _this.init = options => {
-      _this.config = Object.assign({}, defaultConfig, options);
+    this.init = options => {
+      this.config = Object.assign({}, defaultConfig, options);
 
-      _this.langs = Object.assign({}, _this.config.preloaded);
-      _this.locale = _this.config.locale || _this.config.langs[0];
+      this.langs = Object.assign({}, this.config.preloaded);
+      this.locale = this.config.locale || this.config.langs[0];
 
-      return _this.setCurrent(_this.locale);
+      this.setCurrent(this.locale);
     };
   }
 
