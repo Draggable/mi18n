@@ -5,7 +5,7 @@
   "main": "dist/mi18n.min.js",
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./src/**/*.test.js",
-    "build": "webpack --progress -p --colors",
+    "build": "webpack --progress -p",
     "start": "webpack -d | webpack-dev-server -d",
     "tag": "babel-node tools/run tag"
   },
