@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run test",
     "build": "webpack --progress -p --colors",
-    "start": "webpack -d | webpack-dev-server -d --hot --inline --progress --port 6061",
+    "start": "webpack -d | webpack-dev-server -d",
     "tag": "babel-node tools/run tag"
   },
   "repository": {
@@ -24,27 +24,34 @@
   "homepage": "https://github.com/Draggable/mi18n",
   "babel": {
     "presets": [
-      "es2015",
-      "stage-3"
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 versions"
+            ]
+          }
+        }
+      ]
     ]
   },
   "devDependencies": {
-    "babel-core": "^6.14.0",
-    "babel-eslint": "^7.0.0",
-    "babel-loader": "^6.2.5",
-    "babel-plugin-transform-runtime": "^6.15.0",
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-node6": "^11.0.0",
-    "babel-preset-stage-3": "^6.17.0",
-    "babel-register": "^6.14.0",
+    "babel-core": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.4.0",
     "chai": "^3.5.0",
-    "eslint": "^3.8.1",
-    "eslint-config-google": "^0.7.0",
+    "compression-webpack-plugin": "^0.4.0",
+    "eslint": "^3.19.0",
+    "eslint-config-google": "^0.7.1",
+    "eslint-loader": "^1.7.1",
     "json-update": "^3.0.0",
-    "mocha": "^3.0.2",
-    "replace-in-file": "^2.0.1",
-    "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.15.2"
+    "mocha": "^3.2.0",
+    "replace-in-file": "^2.5.0",
+    "webpack": "^2.4.1",
+    "webpack-closure-compiler": "^2.1.4",
+    "webpack-dev-server": "^2.4.4"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
@@ -72,5 +79,6 @@
         "single"
       ]
     }
-  }
+  },
+  "dependencies": {}
 }
