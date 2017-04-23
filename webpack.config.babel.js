@@ -3,6 +3,7 @@ import {resolve} from 'path';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ClosureCompilerPlugin from 'webpack-closure-compiler';
 import {optimize, BannerPlugin} from 'webpack';
+const PRODUCTION = process.argv.includes('-p');
 
 const bannerTemplate = [
   `${pkg.name} - ${pkg.homepage}`,
@@ -33,17 +34,20 @@ let plugins = [
   new BannerPlugin(bannerTemplate)
 ];
 
+const devtool = PRODUCTION ? false : 'source-map';
+
 const webpackConfig = {
   context: resolve(__dirname, 'dist'),
-  entry: {
-    mi18n: resolve(__dirname, 'src/mi18n.js')
-  },
+  entry: [
+    'babel-regenerator-runtime',
+    resolve(__dirname, 'src/mi18n.js')
+  ],
   output: {
     path: resolve(__dirname, 'dist'),
     publicPath: 'dist/',
     library: 'mi18n',
     libraryTarget: 'commonjs2',
-    filename: '[name].min.js'
+    filename: 'mi18n.min.js'
   },
   module: {
     rules: [
@@ -55,13 +59,10 @@ const webpackConfig = {
     }, {
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel-loader',
-      query: {
-        plugins: ['transform-runtime']
-      }
+      loader: 'babel-loader'
     }]
   },
-  devtool: 'eval',
+  devtool,
   plugins,
   resolve: {
     modules: [

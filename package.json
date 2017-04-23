@@ -4,7 +4,7 @@
   "description": "A simple yet robust i18n solution for universal JavaScript apps.",
   "main": "dist/mi18n.min.js",
   "scripts": {
-    "test": "npm run test",
+    "test": "node ./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./src/**/*.test.js",
     "build": "webpack --progress -p --colors",
     "start": "webpack -d | webpack-dev-server -d",
     "tag": "babel-node tools/run tag"
@@ -40,13 +40,14 @@
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.4.0",
+    "babel-regenerator-runtime": "^6.5.0",
     "chai": "^3.5.0",
     "compression-webpack-plugin": "^0.4.0",
     "eslint": "^3.19.0",
     "eslint-config-google": "^0.7.1",
     "eslint-loader": "^1.7.1",
+    "eslint-plugin-mocha": "^4.9.0",
     "json-update": "^3.0.0",
     "mocha": "^3.2.0",
     "replace-in-file": "^2.5.0",
@@ -55,14 +56,19 @@
     "webpack-dev-server": "^2.4.4"
   },
   "eslintConfig": {
+    "plugins": [
+      "mocha"
+    ],
     "parser": "babel-eslint",
     "extends": [
       "eslint:recommended",
       "google"
     ],
     "env": {
+      "es6": true,
       "browser": true,
-      "node": true
+      "node": true,
+      "mocha": true
     },
     "rules": {
       "quote-props": 0,
