@@ -135,7 +135,7 @@ class I18N {
    */
   loadLang(locale) {
     let _this = this;
-    return new window.Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
       if (_this.langs[locale]) {
         resolve(_this.langs[locale]);
       } else {
