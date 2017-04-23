@@ -55,7 +55,10 @@ const webpackConfig = {
     }, {
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel-loader'
+      loader: 'babel-loader',
+      query: {
+        plugins: ['transform-runtime']
+      }
     }]
   },
   devtool: 'eval',
