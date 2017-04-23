@@ -47,7 +47,7 @@ const webpackConfig = {
     publicPath: 'dist/',
     filename: 'mi18n.min.js',
     library: 'mi18n',
-    libraryTarget: 'umd'
+    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
