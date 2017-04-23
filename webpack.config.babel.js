@@ -1,6 +1,8 @@
 import pkg from './package.json';
-import path from 'path';
-import {optimize, BannerPlugin, DefinePlugin} from 'webpack';
+import {resolve} from 'path';
+import CompressionPlugin from 'compression-webpack-plugin';
+import ClosureCompilerPlugin from 'webpack-closure-compiler';
+import {optimize, BannerPlugin} from 'webpack';
 
 const bannerTemplate = [
   `${pkg.name} - ${pkg.homepage}`,
@@ -8,67 +10,67 @@ const bannerTemplate = [
   `Author: ${pkg.author}`
 ].join('\n');
 
-const development = (process.argv.indexOf('-d') !== -1);
 let plugins = [
-  new optimize.DedupePlugin(),
-  new optimize.OccurenceOrderPlugin(),
+  new CompressionPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.(js)$/,
+      threshold: 10240,
+      minRatio: 0.8
+    }),
   new optimize.UglifyJsPlugin({
-    compress: {warnings: false}
+    compress: {warnings: false},
+    comments: false
+  }),
+  new ClosureCompilerPlugin({
+    compiler: {
+      language_in: 'ECMASCRIPT6',
+      language_out: 'ECMASCRIPT5',
+      compilation_level: 'ADVANCED'
+    },
+    concurrency: 3,
   }),
   new BannerPlugin(bannerTemplate)
 ];
 
-if (!development) {
- plugins.push(
-    new DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    })
-  );
-}
-
 const webpackConfig = {
-  context: path.join(__dirname, 'dist'),
+  context: resolve(__dirname, 'dist'),
   entry: {
-    mi18n: path.join(__dirname, 'src/mi18n.js')
+    mi18n: resolve(__dirname, 'src/mi18n.js')
   },
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: resolve(__dirname, 'dist'),
     publicPath: 'dist/',
     library: 'mi18n',
     libraryTarget: 'commonjs2',
     filename: '[name].min.js'
   },
   module: {
-    preLoaders: [{
-      test: /\.js?$/,
-      loaders: ['eslint'],
-      include: 'src/'
-    }],
-    loaders: [{
+    rules: [
+    {
+      enforce: 'pre',
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel',
-      query: {
-        presets: ['es2015', 'stage-3'],
-        plugins: ['transform-runtime']
-      }
+      loader: 'eslint-loader',
+    }, {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: 'babel-loader'
     }]
   },
+  devtool: 'eval',
   plugins,
   resolve: {
-    root: path.join(__dirname, 'src'),
-    extensions: ['', '.js'],
-    modulesDirectories: ['src', 'node_modules']
+    modules: [
+      resolve(__dirname, 'src'),
+      'node_modules'
+    ],
+    extensions: ['.js', '.scss']
   },
   devServer: {
-    hot: true,
+    inline: true,
     contentBase: 'demo/',
-    progress: true,
-    colors: true,
-    noInfo: true,
-    outputPath: path.join(__dirname, './dist')
+    noInfo: true
   }
 };
 
