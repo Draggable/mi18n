@@ -45,8 +45,6 @@ const webpackConfig = {
   output: {
     path: resolve(__dirname, 'dist'),
     publicPath: 'dist/',
-    library: 'mi18n',
-    libraryTarget: 'commonjs2',
     filename: 'mi18n.min.js'
   },
   module: {
