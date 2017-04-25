@@ -4,9 +4,9 @@
   "description": "A simple yet robust i18n solution for universal JavaScript apps.",
   "main": "dist/mi18n.min.js",
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./src/**/*.test.js",
-    "test:watch": "npm run build && npm run test -- --reporter min --watch",
-    "build": "babel-node ./node_modules/webpack/bin/webpack.js --progress --colors",
+    "test": "npm run build && node ./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./src/**/*.test.js",
+    "test:watch": "npm run test -- --reporter min --watch",
+    "build": "node ./node_modules/webpack/bin/webpack.js -p --progress --colors",
     "start": "webpack -d | webpack-dev-server -d",
     "tag": "babel-node tools/run tag"
   },
@@ -30,6 +30,15 @@
         {
           "loose": true,
           "modules": false
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "transform-regenerator",
+        {
+          "asyncGenerators": false,
+          "generators": false
         }
       ]
     ]

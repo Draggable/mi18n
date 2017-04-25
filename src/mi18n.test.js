@@ -3,43 +3,47 @@ const {expect} = require('chai');
 const mi18n = require('../dist/mi18n.min.js').default;
 
 describe('I18N', () => {
+  const locale = 'te-ST';
   const testOpts = {
-    locale: 'te-ST',
+    locale,
     preloaded: {
       'te-ST': {
-        testString: 'Teeesst'
+        testKey: 'Teeesst'
       }
     }
   };
 
-  it('shall exist', () => {
+  it('should exist', () => {
     expect(mi18n).to.exist;
   });
 
   describe('should have methods', async () => {
-    describe('init()', async () => {
-      // const i18n = await new mi18n(testOpts).init(testOpts);
+    await mi18n.init(testOpts);
+    describe('init()', () => {
       it('should exist', () => {
         expect(mi18n.init).to.exist;
         expect(typeof mi18n.init).to.equal('function');
       });
-      it('should set locale', async () => {
-        await new mi18n.init(testOpts);
-        expect(mi18n.config.locale).to.equal('te-ST');
+      it('should set locale', () => {
+        expect(mi18n.config.locale).to.equal(locale);
+      });
+      it('should set current language', () => {
+        expect(mi18n.current).to.exist;
+        expect(Object.keys(mi18n.current)).to.contain('testKey');
       });
     });
   });
 
   describe('should have methods after init', async () => {
-    await new mi18n.init(testOpts);
+    await mi18n.init(testOpts);
 
     describe('get()', () => {
       it('shall exist', () =>
         expect(mi18n.get).to.exist
       );
 
-      it('shall return a string', async () => {
-        const str = mi18n.get('testString');
+      it('shall return a string', () => {
+        const str = mi18n.get('testKey');
         expect(str).to.equal('Teeesst');
       });
     });

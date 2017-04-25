@@ -1,5 +1,3 @@
-// import 'babel-regenerator-runtime';
-
 /**
  * Main mi18n class.
  */
