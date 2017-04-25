@@ -1,8 +1,8 @@
-import pkg from './package.json';
-import {resolve} from 'path';
-import CompressionPlugin from 'compression-webpack-plugin';
-import ClosureCompilerPlugin from 'webpack-closure-compiler';
-import {optimize, BannerPlugin} from 'webpack';
+const pkg = require('./package.json');
+const {resolve} = require('path');
+const {BannerPlugin} = require('webpack');
+let BabiliPlugin = require('babili-webpack-plugin');
+
 const PRODUCTION = process.argv.includes('-p');
 
 const bannerTemplate = [
@@ -12,25 +12,7 @@ const bannerTemplate = [
 ].join('\n');
 
 let plugins = [
-  new CompressionPlugin({
-      asset: '[path].gz[query]',
-      algorithm: 'gzip',
-      test: /\.(js)$/,
-      threshold: 10240,
-      minRatio: 0.8
-    }),
-  new optimize.UglifyJsPlugin({
-    compress: {warnings: false},
-    comments: false
-  }),
-  new ClosureCompilerPlugin({
-    compiler: {
-      language_in: 'ECMASCRIPT6',
-      language_out: 'ECMASCRIPT5',
-      compilation_level: 'ADVANCED'
-    },
-    concurrency: 3,
-  }),
+  new BabiliPlugin(),
   new BannerPlugin(bannerTemplate)
 ];
 
@@ -38,29 +20,27 @@ const devtool = PRODUCTION ? false : 'source-map';
 
 const webpackConfig = {
   context: resolve(__dirname, 'dist'),
-  entry: [
-    'babel-regenerator-runtime',
-    resolve(__dirname, 'src/mi18n.js')
-  ],
+  entry: {
+    mi18n: resolve(__dirname, 'src/mi18n.js')
+  },
   output: {
     path: resolve(__dirname, 'dist'),
-    publicPath: 'dist/',
-    filename: 'mi18n.min.js',
-    library: 'mi18n',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
+    filename: '[name].min.js'
   },
   module: {
     rules: [
-    {
-      enforce: 'pre',
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: 'eslint-loader',
-    }, {
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader'
-    }]
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader'
+      }
+    ]
   },
   devtool,
   plugins,
@@ -69,7 +49,7 @@ const webpackConfig = {
       resolve(__dirname, 'src'),
       'node_modules'
     ],
-    extensions: ['.js', '.scss']
+    extensions: ['.js', '.json']
   },
   devServer: {
     inline: true,
