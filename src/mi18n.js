@@ -32,7 +32,7 @@ class I18N {
       this.langs = Object.assign({}, this.config.preloaded);
       this.locale = this.config.locale || this.config.langs[0];
 
-      this.setCurrent(this.locale);
+      return this.setCurrent(this.locale);
     };
   }
 
