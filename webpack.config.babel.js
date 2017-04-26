@@ -1,7 +1,8 @@
 const pkg = require('./package.json');
 const {resolve} = require('path');
 const {BannerPlugin} = require('webpack');
-let BabiliPlugin = require('babili-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const BabiliPlugin = require('babili-webpack-plugin');
 
 const PRODUCTION = process.argv.includes('-p');
 
@@ -12,8 +13,19 @@ const bannerTemplate = [
 ].join('\n');
 
 let plugins = [
-  new BabiliPlugin(),
-  new BannerPlugin(bannerTemplate)
+  new BabiliPlugin({
+    removeDebugger: true
+  }, {
+    comments: false
+  }),
+  new BannerPlugin(bannerTemplate),
+  new CompressionPlugin({
+    asset: '[path].gz[query]',
+    algorithm: 'gzip',
+    test: /\.(js)$/,
+    threshold: 10240,
+    minRatio: 0.8
+  })
 ];
 
 const devtool = PRODUCTION ? false : 'source-map';

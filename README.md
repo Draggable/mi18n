@@ -1,6 +1,6 @@
 # mi18n v0.3.3
 
-Add multi-lingual support to any JavaScript app or module with this light weight package.
+Add front-end multi-lingual support to any JavaScript app or module with this light weight package.
 
 Features:
 - easy translation of static text files
