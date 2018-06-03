@@ -7,17 +7,15 @@ class I18N {
    * @param {Object} options
    */
   constructor(options) {
-    let defaultConfig = {
-        extension: '.lang',
-        // local or remote directory containing language files
-        location: 'assets/lang/',
-        // list of available locales, handy for populating selector.
-        langs: [
-          'en-US'
-        ],
-        locale: 'en-US', // init with user's preferred language
-        preloaded: {}
-      };
+    const defaultConfig = {
+      extension: '.lang',
+      // local or remote directory containing language files
+      location: 'assets/lang/',
+      // list of available locales, handy for populating selector.
+      langs: ['en-US'],
+      locale: 'en-US', // init with user's preferred language
+      preloaded: {},
+    }
 
     /**
      * Load language and set default
@@ -25,15 +23,14 @@ class I18N {
      * @return {Promise}        resolves language
      */
     this.init = options => {
-      this.config = Object.assign({}, defaultConfig, options);
+      this.config = Object.assign({}, defaultConfig, options)
 
-      this.langs = Object.assign({}, this.config.preloaded);
-      this.locale = this.config.locale || this.config.langs[0];
+      this.langs = Object.assign({}, this.config.preloaded)
+      this.locale = this.config.locale || this.config.langs[0]
 
-      return this.setCurrent(this.locale);
-    };
+      return this.setCurrent(this.locale)
+    }
   }
-
 
   /**
    * get a string from a loaded language file
@@ -41,7 +38,7 @@ class I18N {
    * @return {String}      - correct language string
    */
   getValue(key) {
-    return (this.current && this.current[key]) || key;
+    return (this.current && this.current[key]) || key
   }
 
   /**
@@ -53,22 +50,22 @@ class I18N {
     const mapObj = {
       '{': '\\{',
       '}': '\\}',
-      '|': '\\|'
-    };
+      '|': '\\|',
+    }
 
-    str = str.replace(/\{|\}|\|/g, matched => mapObj[matched]);
+    str = str.replace(/\{|\}|\|/g, matched => mapObj[matched])
 
-    return new RegExp(str, 'g');
+    return new RegExp(str, 'g')
   }
 
   /**
-  * Temporarily put a string into the currently loaded language
-  * @param  {String} key
-  * @param  {String} string
-  * @return {String} string in current language
-  */
+   * Temporarily put a string into the currently loaded language
+   * @param  {String} key
+   * @param  {String} string
+   * @return {String} string in current language
+   */
   put(key, string) {
-    return this.current[key] = string;
+    return (this.current[key] = string)
   }
 
   /**
@@ -78,23 +75,23 @@ class I18N {
    * @return {String}      updated string translation
    */
   get(key, args) {
-    let _this = this;
-    let value = this.getValue(key);
-    let tokens = value.match(/\{[^\}]+?\}/g);
-    let token;
+    const _this = this
+    let value = this.getValue(key)
+    const tokens = value.match(/\{[^\}]+?\}/g)
+    let token
 
     if (args && tokens) {
       if ('object' === typeof args) {
         for (let i = 0; i < tokens.length; i++) {
-          token = tokens[i].substring(1, tokens[i].length - 1);
-          value = value.replace(_this.makeSafe(tokens[i]), args[token] || '');
+          token = tokens[i].substring(1, tokens[i].length - 1)
+          value = value.replace(_this.makeSafe(tokens[i]), args[token] || '')
         }
       } else {
-        value = value.replace(/\{[^\}]+?\}/g, args);
+        value = value.replace(/\{[^\}]+?\}/g, args)
       }
     }
 
-    return value;
+    return value
   }
 
   /**
@@ -103,18 +100,17 @@ class I18N {
    * @return {Object} converted language file
    */
   fromFile(rawText) {
-    const lines = rawText.split('\n');
-    let lang = {};
+    const lines = rawText.split('\n')
+    const lang = {}
 
     for (let matches, i = 0; i < lines.length; i++) {
-      matches = lines[i].match(/^(.+?) *?= *?([^\n]+)/);
+      matches = lines[i].match(/^(.+?) *?= *?([^\n]+)/)
       if (matches) {
-        let value = matches[2].replace(/^\s+|\s+$/, '');
-        lang[matches[1]] = value;
+        lang[matches[1]] = matches[2].replace(/^\s+|\s+$/, '')
       }
     }
 
-    return lang;
+    return lang
   }
 
   /**
@@ -123,8 +119,7 @@ class I18N {
    * @return {Object}          processed language
    */
   processFile(response) {
-    let rawText = response.replace(/\n\n/g, '\n');
-    return this.fromFile(rawText);
+    return this.fromFile(response.replace(/\n\n/g, '\n'))
   }
 
   /**
@@ -133,35 +128,35 @@ class I18N {
    * @return {Promise}       resolves response
    */
   loadLang(locale) {
-    let _this = this;
+    const _this = this
     return new Promise(function(resolve, reject) {
       if (_this.langs[locale]) {
-        resolve(_this.langs[locale]);
+        resolve(_this.langs[locale])
       } else {
-        let xhr = new XMLHttpRequest();
-        let langFile = _this.config.location + locale + _this.config.extension;
-        xhr.open('GET', langFile, true);
+        const xhr = new XMLHttpRequest()
+        const langFile = [_this.config.location, locale, _this.config.extension].join('')
+        xhr.open('GET', langFile, true)
         xhr.onload = function() {
           if (this.status <= 304) {
-            let processedFile = _this.processFile(xhr.responseText);
-            _this.langs[locale] = processedFile;
-            resolve(processedFile);
+            const processedFile = _this.processFile(xhr.responseText)
+            _this.langs[locale] = processedFile
+            resolve(processedFile)
           } else {
             reject({
               status: this.status,
-              statusText: xhr.statusText
-            });
+              statusText: xhr.statusText,
+            })
           }
-        };
+        }
         xhr.onerror = function() {
           reject({
             status: this.status,
-            statusText: xhr.statusText
-          });
-        };
-        xhr.send();
+            statusText: xhr.statusText,
+          })
+        }
+        xhr.send()
       }
-    });
+    })
   }
 
   /**
@@ -169,7 +164,7 @@ class I18N {
    * @return {Object} all configured languages
    */
   get getLangs() {
-    return this.config.langs;
+    return this.config.langs
   }
 
   /**
@@ -177,15 +172,13 @@ class I18N {
    * @param {String}   locale
    * @return {Promise} language
    */
-  async setCurrent(locale = 'en-US') {
-    await this.loadLang(locale);
-
-    this.locale = locale;
-    this.current = this.langs[locale];
-
-    return this.current;
+  setCurrent(locale = 'en-US') {
+    return this.loadLang(locale).then(language => {
+      this.locale = locale
+      this.current = this.langs[locale]
+      return language
+    })
   }
-
 }
 
-export default new I18N();
+export default new I18N()

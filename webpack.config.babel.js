@@ -2,7 +2,7 @@ const pkg = require('./package.json');
 const {resolve} = require('path');
 const {BannerPlugin} = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
-const BabiliPlugin = require('babili-webpack-plugin');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 
 const PRODUCTION = process.argv.includes('-p');
 
@@ -13,7 +13,7 @@ const bannerTemplate = [
 ].join('\n');
 
 let plugins = [
-  new BabiliPlugin({
+  new MinifyPlugin({
     removeDebugger: true
   }, {
     comments: false
