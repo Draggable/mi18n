@@ -19,6 +19,8 @@ export class I18N {
    * @param {Object} options
    */
   constructor(options = DEFAULT_CONFIG) {
+    this.langs = Object.create(null)
+    this.loaded = []
     this.processConfig(options)
   }
 
@@ -27,11 +29,13 @@ export class I18N {
    * @param {Object} options
    */
   processConfig(options) {
-    const { location, override, ...restOptions } = Object.assign({}, DEFAULT_CONFIG, options)
+    const { location, ...restOptions } = Object.assign({}, DEFAULT_CONFIG, options)
     const parsedLocation = location.replace(/\/?$/, '/')
-    this.config = Object.assign({}, { location: parsedLocation }, { override }, restOptions)
-    this.langs = Object.entries(override).reduce((acc, [locale, lang]) => {
-      acc[locale] = Object.assign({}, this.langs[locale], lang)
+    this.config = Object.assign({}, { location: parsedLocation }, restOptions)
+    const {override, preloaded = {}} = this.config
+    const allLangs = Object.entries(this.langs).concat(Object.entries(override || preloaded))
+    this.langs = allLangs.reduce((acc, [locale, lang]) => {
+      acc[locale] = this.applyLanguage.call(this, locale, lang)
       return acc
     }, {})
     this.locale = this.config.locale || this.config.langs[0]
@@ -45,6 +49,17 @@ export class I18N {
   init(options) {
     this.processConfig.call(this, Object.assign({}, this.config, options))
     return this.setCurrent(this.locale)
+  }
+
+  /**
+   * Adds a language to the list of available languages
+   * @param {String} locale
+   * @param {String|Object} lang
+   */
+  addLanguage(locale, lang = {}) {
+    lang = typeof lang === 'string' ? this.processFile.call(this, lang) : lang
+    this.applyLanguage.call(this, locale, lang)
+    this.config.langs.push('locale')
   }
 
   /**
@@ -143,39 +158,43 @@ export class I18N {
   /**
    * Load a remotely stored language file
    * @param  {String} locale
+   * @param  {Boolean} useCache
    * @return {Promise}       resolves response
    */
-  loadLang(locale) {
+  loadLang(locale, useCache = true) {
     const _this = this
     return new Promise(function(resolve, reject) {
-      if (_this.langs[locale]) {
+      if (_this.loaded.indexOf(locale) !== -1 && useCache) {
         _this.applyLanguage.call(_this, _this.langs[locale])
-        resolve(_this.langs[locale])
+        return resolve(_this.langs[locale])
       } else {
         const langFile = [_this.config.location, locale, _this.config.extension].join('')
-        fetch(langFile)
+        return fetch(langFile)
           .then(({ data: lang }) => {
             const processedFile = _this.processFile(lang)
             _this.applyLanguage.call(_this, locale, processedFile)
-            resolve(_this.langs[locale])
+            _this.loaded.push(locale)
+            return resolve(_this.langs[locale])
           })
           .catch(({ response: { config: { url }, status, statusText } }) => {
-            return reject(new Error(`${status}: ${statusText}\n ${url}`))
+            const lang = _this.applyLanguage.call(_this, locale)
+            resolve(lang)
           })
       }
     })
   }
 
   /**
-   * applies overrides form config
+   * applies overrides from config
    * @param {String} locale
    * @param {Object} lang
+   * @return {Object} overriden language
    */
-  applyLanguage(locale, lang) {
+  applyLanguage(locale, lang = {}) {
     const override = this.config.override[locale] || {}
-    this.langs[locale] = Object.assign({}, lang, override)
-    this.locale = locale
-    this.current = this.langs[locale]
+    const existingLang = this.langs[locale] || {}
+    this.langs[locale] = Object.assign({}, existingLang, lang, override)
+    return this.langs[locale]
   }
 
   /**
@@ -198,7 +217,6 @@ export class I18N {
         this.current = this.langs[locale]
         return language
       })
-      .catch(err => console.error(err))
   }
 }
 

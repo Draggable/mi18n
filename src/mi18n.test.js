@@ -53,8 +53,25 @@ describe('I18N', () => {
     const i18n = new I18N({ location })
     it('should load de-DE', done => {
       i18n.loadLang('de-DE').then(lang => {
-        expect(i18n.locale).to.equal('de-DE')
-        expect(i18n.get('checkbox')).to.equal('Kontrollkästchen')
+        expect(lang).to.be.an('object')
+        expect(Object.keys(i18n.langs)[0]).to.equal('de-DE')
+        done()
+      })
+    })
+  })
+
+  describe('addLanguage', () => {
+    const locale = 'te-ST'
+    const i18n = new I18N()
+    it('should load te-ST', done => {
+      i18n.addLanguage(locale, {
+        myKey: 'one thing',
+        yourKey: "shouldn't change",
+      })
+      i18n.setCurrent(locale).then(() => {
+        expect(i18n.locale).to.equal(locale)
+        expect(i18n.get('myKey')).to.equal('one thing')
+        expect(i18n.get('yourKey')).to.equal("shouldn't change")
         done()
       })
     })
