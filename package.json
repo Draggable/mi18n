@@ -1,12 +1,12 @@
 {
   "name": "mi18n",
-  "version": "0.3.5",
+  "version": "0.4.0-beta.1",
   "description": "A simple yet robust i18n solution for universal JavaScript apps.",
   "main": "dist/mi18n.min.js",
   "scripts": {
     "test": "npm run build && node ./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./src/**/*.test.js",
     "test:watch": "npm run test -- --reporter min --watch",
-    "build": "node ./node_modules/webpack/bin/webpack.js -p --progress --colors",
+    "build": "rm -rf ./dist/ && node ./node_modules/webpack/bin/webpack.js -p --progress --colors",
     "start": "webpack -d | webpack-dev-server -d",
     "tag": "babel-node --no-babel-rc --presets=es2015 tools/run tag"
   },
@@ -40,13 +40,18 @@
           "loose": true
         }
       ]
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
     ]
   },
   "devDependencies": {
+    "axios": "^0.18.0",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",
     "babel-minify-webpack-plugin": "^0.3.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.4.0",
     "chai": "^3.5.0",
     "compression-webpack-plugin": "^0.4.0",

@@ -50,8 +50,8 @@ function updateMd(version) {
  * @return {Promise} json.update
  */
 async function tag() {
-  let releaseType = process.argv.slice(3)[0] || 'patch';
-  let version = {
+  const releaseType = process.argv.slice(3)[0] || 'patch';
+  const version = {
     current: pkg.version,
     new: semver.inc(pkg.version, releaseType)
   };
