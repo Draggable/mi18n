@@ -184,7 +184,7 @@ export class I18N {
    */
   applyLanguage(locale, lang = {}) {
     const override = this.config.override[locale] || {}
-    this.langs[locale] = Object.assign({}, lang, override)
+    this.langs[locale] = Object.assign({}, this.langs && this.langs[locale], lang, override)
   }
 
   /**
