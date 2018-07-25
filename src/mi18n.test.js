@@ -53,9 +53,8 @@ describe('I18N', () => {
     const i18n = new I18N({ location })
     it('should load de-DE', done => {
       i18n.loadLang('de-DE').then(lang => {
-
+        expect(lang).to.be.an('object')
         expect(Object.keys(i18n.langs)[0]).to.equal('de-DE')
-        // expect(i18n.get('checkbox')).to.equal('Kontrollkästchen')
         done()
       })
     })
@@ -64,35 +63,15 @@ describe('I18N', () => {
   describe('addLanguage', () => {
     const locale = 'te-ST'
     const i18n = new I18N()
-    it('should load de-DE', done => {
+    it('should load te-ST', done => {
       i18n.addLanguage(locale, {
-        myKey: 'oneThing'
+        myKey: 'one thing',
+        yourKey: "shouldn't change",
       })
       i18n.setCurrent(locale).then(() => {
         expect(i18n.locale).to.equal(locale)
-        expect(i18n.get('myKey')).to.equal('oneThing')
-        done()
-      })
-    })
-  })
-
-  describe('addLanguage', () => {
-    const locale = 'te-ST'
-    const override = {
-      'te-ST': {
-        myKey: 'another thing'
-      }
-    }
-    const i18n = new I18N({override})
-    it('maintain override', done => {
-      i18n.addLanguage(locale, {
-        myKey: 'oneThing',
-        yourKey: 'shouldn\'t change'
-      })
-      i18n.setCurrent(locale).then(() => {
-        expect(i18n.locale).to.equal(locale)
-        expect(i18n.get('myKey')).to.equal('another thing')
-        expect(i18n.get('yourKey')).to.equal('shouldn\'t change')
+        expect(i18n.get('myKey')).to.equal('one thing')
+        expect(i18n.get('yourKey')).to.equal("shouldn't change")
         done()
       })
     })
