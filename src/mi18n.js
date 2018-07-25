@@ -1,35 +1,50 @@
+import { get as fetch } from 'axios'
+
+const DEFAULT_CONFIG = {
+  extension: '.lang',
+  // local or remote directory containing language files
+  location: 'assets/lang/',
+  // list of available locales, handy for populating selector.
+  langs: ['en-US'],
+  locale: 'en-US', // init with user's preferred language
+  override: {},
+}
+
 /**
  * Main mi18n class.
  */
-class I18N {
+export class I18N {
   /**
    * Process options and start the module
    * @param {Object} options
    */
-  constructor(options) {
-    const defaultConfig = {
-      extension: '.lang',
-      // local or remote directory containing language files
-      location: 'assets/lang/',
-      // list of available locales, handy for populating selector.
-      langs: ['en-US'],
-      locale: 'en-US', // init with user's preferred language
-      preloaded: {},
-    }
+  constructor(options = DEFAULT_CONFIG) {
+    this.processConfig(options)
+  }
 
-    /**
-     * Load language and set default
-     * @param  {Object} options
-     * @return {Promise}        resolves language
-     */
-    this.init = options => {
-      this.config = Object.assign({}, defaultConfig, options)
+  /**
+   * parse and format config
+   * @param {Object} options
+   */
+  processConfig(options) {
+    const { location, override, ...restOptions } = Object.assign({}, DEFAULT_CONFIG, options)
+    const parsedLocation = location.replace(/\/?$/, '/')
+    this.config = Object.assign({}, { location: parsedLocation }, { override }, restOptions)
+    this.langs = Object.entries(override).reduce((acc, [locale, lang]) => {
+      acc[locale] = Object.assign({}, this.langs[locale], lang)
+      return acc
+    }, {})
+    this.locale = this.config.locale || this.config.langs[0]
+  }
 
-      this.langs = Object.assign({}, this.config.preloaded)
-      this.locale = this.config.locale || this.config.langs[0]
-
-      return this.setCurrent(this.locale)
-    }
+  /**
+   * Load language and set default
+   * @param  {Object} options
+   * @return {Promise}        resolves language
+   */
+  init(options) {
+    this.processConfig.call(this, Object.assign({}, this.config, options))
+    return this.setCurrent(this.locale)
   }
 
   /**
@@ -38,7 +53,7 @@ class I18N {
    * @return {String}      - correct language string
    */
   getValue(key) {
-    return (this.current && this.current[key]) || key
+    return this.current && this.current[key]
   }
 
   /**
@@ -77,6 +92,9 @@ class I18N {
   get(key, args) {
     const _this = this
     let value = this.getValue(key)
+    if (!value) {
+      return
+    }
     const tokens = value.match(/\{[^\}]+?\}/g)
     let token
 
@@ -131,32 +149,33 @@ class I18N {
     const _this = this
     return new Promise(function(resolve, reject) {
       if (_this.langs[locale]) {
+        _this.applyLanguage.call(_this, _this.langs[locale])
         resolve(_this.langs[locale])
       } else {
-        const xhr = new XMLHttpRequest()
         const langFile = [_this.config.location, locale, _this.config.extension].join('')
-        xhr.open('GET', langFile, true)
-        xhr.onload = function() {
-          if (this.status <= 304) {
-            const processedFile = _this.processFile(xhr.responseText)
-            _this.langs[locale] = processedFile
-            resolve(processedFile)
-          } else {
-            reject({
-              status: this.status,
-              statusText: xhr.statusText,
-            })
-          }
-        }
-        xhr.onerror = function() {
-          reject({
-            status: this.status,
-            statusText: xhr.statusText,
+        fetch(langFile)
+          .then(({ data: lang }) => {
+            const processedFile = _this.processFile(lang)
+            _this.applyLanguage.call(_this, locale, processedFile)
+            resolve(_this.langs[locale])
           })
-        }
-        xhr.send()
+          .catch(({ response: { config: { url }, status, statusText } }) => {
+            return reject(new Error(`${status}: ${statusText}\n ${url}`))
+          })
       }
     })
+  }
+
+  /**
+   * applies overrides form config
+   * @param {String} locale
+   * @param {Object} lang
+   */
+  applyLanguage(locale, lang) {
+    const override = this.config.override[locale] || {}
+    this.langs[locale] = Object.assign({}, lang, override)
+    this.locale = locale
+    this.current = this.langs[locale]
   }
 
   /**
@@ -173,11 +192,13 @@ class I18N {
    * @return {Promise} language
    */
   setCurrent(locale = 'en-US') {
-    return this.loadLang(locale).then(language => {
-      this.locale = locale
-      this.current = this.langs[locale]
-      return language
-    })
+    return this.loadLang(locale)
+      .then(language => {
+        this.locale = locale
+        this.current = this.langs[locale]
+        return language
+      })
+      .catch(err => console.error(err))
   }
 }
 
