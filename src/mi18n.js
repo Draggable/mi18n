@@ -31,10 +31,21 @@ export class I18N {
     const parsedLocation = location.replace(/\/?$/, '/')
     this.config = Object.assign({}, { location: parsedLocation }, { override }, restOptions)
     this.langs = Object.entries(override).reduce((acc, [locale, lang]) => {
-      acc[locale] = Object.assign({}, this.langs[locale], lang)
+      acc[locale] = Object.assign({}, this.langs && this.langs[locale], lang)
       return acc
     }, {})
     this.locale = this.config.locale || this.config.langs[0]
+  }
+
+  /**
+   * Adds a language to the list of available languages
+   * @param {String} locale
+   * @param {String|Object} lang
+   */
+  addLanguage(locale, lang = {}) {
+    lang = typeof lang === 'string' ? this.processFile.call(this, lang) : lang
+    this.applyLanguage.call(this, locale, lang)
+    this.config.langs.push('locale')
   }
 
   /**
@@ -171,11 +182,9 @@ export class I18N {
    * @param {String} locale
    * @param {Object} lang
    */
-  applyLanguage(locale, lang) {
+  applyLanguage(locale, lang = {}) {
     const override = this.config.override[locale] || {}
     this.langs[locale] = Object.assign({}, lang, override)
-    this.locale = locale
-    this.current = this.langs[locale]
   }
 
   /**
