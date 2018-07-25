@@ -32,7 +32,8 @@ export class I18N {
     const { location, ...restOptions } = Object.assign({}, DEFAULT_CONFIG, options)
     const parsedLocation = location.replace(/\/?$/, '/')
     this.config = Object.assign({}, { location: parsedLocation }, restOptions)
-    const allLangs = Object.entries(this.langs).concat(Object.entries(this.config.override))
+    const {override, preloaded = {}} = this.config
+    const allLangs = Object.entries(this.langs).concat(Object.entries(override || preloaded))
     this.langs = allLangs.reduce((acc, [locale, lang]) => {
       acc[locale] = this.applyLanguage.call(this, locale, lang)
       return acc
