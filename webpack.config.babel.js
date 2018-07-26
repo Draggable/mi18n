@@ -12,7 +12,7 @@ const bannerTemplate = [
   `Author: ${pkg.author}`
 ].join('\n');
 
-let plugins = [
+const plugins = [
   new MinifyPlugin({
     removeDebugger: true
   }, {
