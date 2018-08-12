@@ -11,7 +11,9 @@ const DEFAULT_CONFIG = {
 }
 
 /**
- * Main mi18n class.
+ * Main mi18n class
+ * @class I18N
+ * @classdesc methods and data store for mi18n
  */
 export class I18N {
   /**
@@ -176,7 +178,7 @@ export class I18N {
             _this.loaded.push(locale)
             return resolve(_this.langs[locale])
           })
-          .catch(({ response: { config: { url }, status, statusText } }) => {
+          .catch(() => {
             const lang = _this.applyLanguage.call(_this, locale)
             resolve(lang)
           })

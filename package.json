@@ -4,14 +4,16 @@
   "description": "A simple yet robust i18n solution for universal JavaScript apps.",
   "main": "dist/mi18n.min.js",
   "scripts": {
-    "test": "npm run build && node ./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./src/**/*.test.js",
-    "test:watch": "npm run test -- --reporter min --watch",
-    "build": "rm -rf ./dist/ && node ./node_modules/webpack/bin/webpack.js -p --progress --colors",
-    "start": "webpack -d | webpack-dev-server -d",
-    "tag": "babel-node --no-babel-rc --presets=es2015 tools/run tag"
+    "test": "node node_modules/mocha/bin/mocha --compilers js:babel-core/register src/**/*.test.js",
+    "test:watch": "yarn test -- --reporter min --watch",
+    "build": "rm -rf dist/ && webpack -p --progress --colors",
+    "start": "webpack-dev-server -d",
+    "tag": "babel-node --no-babel-rc --presets=es2015 tools/run tag",
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "repository": {
-    "url": "http://github.com/draggable/mi18n",
+    "url": "https://github.com/Draggable/mi18n",
     "type": "git"
   },
   "keywords": [
@@ -64,8 +66,10 @@
     "json-update": "^3.0.0",
     "mocha": "^3.2.0",
     "replace-in-file": "^2.5.0",
+    "semantic-release": "^15.9.8",
     "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.4"
+    "webpack-dev-server": "^2.4.4",
+    "travis-deploy-once": "^5.0.2"
   },
   "eslintConfig": {
     "plugins": [
@@ -99,7 +103,8 @@
       "quotes": [
         2,
         "single"
-      ]
+      ],
+      "require-jsdoc": 1
     }
   },
   "dependencies": {}
