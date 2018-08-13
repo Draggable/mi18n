@@ -1,3 +1,8 @@
 {
-  "name": "mi18n"
+  "name": "mi18n",
+  "alias": "mi18n",
+  "type": "static",
+  "files": [
+    "demo"
+  ]
 }

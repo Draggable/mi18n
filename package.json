@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --require babel-core/register src/**/*.test.js",
     "test:watch": "yarn test -- --reporter min --watch",
-    "build": "rm -rf dist/ && webpack --mode production --progress",
+    "deploy": "now demo/ --public --token $NOW_TOKEN -A ../now.json && now alias",
+    "build": "rm -rf dist/ && webpack --env.production --progress",
     "start": "webpack-dev-server --mode development",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once"
@@ -54,7 +55,6 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^7.1.5",
-    "babel-minify-webpack-plugin": "^0.3.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
@@ -67,9 +67,10 @@
     "eslint-plugin-prettier": "^2.6.2",
     "json-update": "^3.0.0",
     "mocha": "^5.2.0",
-    "replace-in-file": "^3.4.0",
+    "replace-in-file": "^3.4.2",
     "semantic-release": "^15.9.8",
     "travis-deploy-once": "^5.0.2",
+    "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"

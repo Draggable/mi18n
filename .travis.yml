@@ -11,9 +11,10 @@ notifications:
 before_deploy:
 - yarn add now --no-save
 - now rm mi18n --token $NOW_TOKEN --yes || true
+- cp dist/* demo/
 deploy:
 - provider: script
-  script: now --public --token $NOW_TOKEN
+  script: yarn deploy
   skip_cleanup: true
   on:
     master: true
