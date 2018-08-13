@@ -31,7 +31,7 @@ const devtool = PRODUCTION ? false : 'source-map'
 
 const webpackConfig = {
   entry: {
-    mi18n: resolve(__dirname, 'src', 'mi18n.js'),
+    mi18n: './src/mi18n.js',
   },
   output: {
     path: resolve(__dirname, 'dist'),
