@@ -1,44 +1,42 @@
-const pkg = require('./package.json');
-const {resolve} = require('path');
-const {BannerPlugin} = require('webpack');
-const CompressionPlugin = require('compression-webpack-plugin');
-const MinifyPlugin = require('babel-minify-webpack-plugin');
+const pkg = require('./package.json')
+const { resolve } = require('path')
+const { BannerPlugin } = require('webpack')
+const CompressionPlugin = require('compression-webpack-plugin')
+const MinifyPlugin = require('babel-minify-webpack-plugin')
 
-const PRODUCTION = process.argv.includes('-p');
+const PRODUCTION = process.argv.includes('-p')
 
-const bannerTemplate = [
-  `${pkg.name} - ${pkg.homepage}`,
-  `Version: ${pkg.version}`,
-  `Author: ${pkg.author}`
-].join('\n');
+const bannerTemplate = [`${pkg.name} - ${pkg.homepage}`, `Version: ${pkg.version}`, `Author: ${pkg.author}`].join('\n')
 
 const plugins = [
-  new MinifyPlugin({
-    removeDebugger: true
-  }, {
-    comments: false
-  }),
+  new MinifyPlugin(
+    {
+      removeDebugger: true,
+    },
+    {
+      comments: false,
+    }
+  ),
   new BannerPlugin(bannerTemplate),
   new CompressionPlugin({
     asset: '[path].gz[query]',
     algorithm: 'gzip',
     test: /\.(js)$/,
     threshold: 10240,
-    minRatio: 0.8
-  })
-];
+    minRatio: 0.8,
+  }),
+]
 
-const devtool = PRODUCTION ? false : 'source-map';
+const devtool = PRODUCTION ? false : 'source-map'
 
 const webpackConfig = {
-  context: resolve(__dirname, 'dist'),
   entry: {
-    mi18n: resolve(__dirname, 'src/mi18n.js')
+    mi18n: resolve(__dirname, 'src', 'mi18n.js'),
   },
   output: {
     path: resolve(__dirname, 'dist'),
     libraryTarget: 'commonjs2',
-    filename: '[name].min.js'
+    filename: '[name].min.js',
   },
   module: {
     rules: [
@@ -50,24 +48,21 @@ const webpackConfig = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader'
-      }
-    ]
+        loader: 'babel-loader',
+      },
+    ],
   },
   devtool,
   plugins,
   resolve: {
-    modules: [
-      resolve(__dirname, 'src'),
-      'node_modules'
-    ],
-    extensions: ['.js', '.json']
+    modules: [resolve(__dirname, 'src'), 'node_modules'],
+    extensions: ['.js', '.json'],
   },
   devServer: {
     inline: true,
     contentBase: 'demo/',
-    noInfo: true
-  }
-};
+    noInfo: true,
+  },
+}
 
-module.exports = webpackConfig;
+module.exports = webpackConfig
