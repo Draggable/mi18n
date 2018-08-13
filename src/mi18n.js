@@ -112,7 +112,7 @@ export class I18N {
     if (!value) {
       return
     }
-    const tokens = value.match(/\{[^\}]+?\}/g)
+    const tokens = value.match(/\{[^}]+?\}/g)
     let token
 
     if (args && tokens) {
@@ -122,7 +122,7 @@ export class I18N {
           value = value.replace(_this.makeSafe(tokens[i]), args[token] || '')
         }
       } else {
-        value = value.replace(/\{[^\}]+?\}/g, args)
+        value = value.replace(/\{[^}]+?\}/g, args)
       }
     }
 
