@@ -8,7 +8,7 @@ cache:
 notifications:
   email: false
 before_deploy:
-- yarn install now --no-save
+- yarn add now --no-save
 - now rm mi18n --token $NOW_TOKEN --yes || true
 deploy:
 - provider: script
