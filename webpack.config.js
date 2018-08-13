@@ -4,7 +4,7 @@ const { BannerPlugin } = require('webpack')
 const CompressionPlugin = require('compression-webpack-plugin')
 const MinifyPlugin = require('babel-minify-webpack-plugin')
 
-const PRODUCTION = process.argv.includes('-p')
+const PRODUCTION = process.argv.includes('production')
 
 const bannerTemplate = [`${pkg.name} - ${pkg.homepage}`, `Version: ${pkg.version}`, `Author: ${pkg.author}`].join('\n')
 
@@ -27,9 +27,11 @@ const plugins = [
   }),
 ]
 
-const devtool = PRODUCTION ? false : 'source-map'
+const devtool = PRODUCTION ? false : 'inline-source-map'
 
 const webpackConfig = {
+  mode: PRODUCTION ? 'production' : 'development',
+  context: resolve(__dirname),
   entry: {
     mi18n: './src/mi18n.js',
   },

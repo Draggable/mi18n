@@ -10,6 +10,7 @@ describe('I18N', () => {
     override: {
       'te-ST': {
         testKey: 'Teeesst',
+        testVars: 'I saw {count} {animals}',
       },
     },
   }
@@ -43,6 +44,14 @@ describe('I18N', () => {
         it('shall return a string', () => {
           const str = mi18n.get('testKey')
           expect(str).to.equal('Teeesst')
+        })
+
+        it('shall return a string with vars', () => {
+          const str = mi18n.get('testVars', {
+            count: 3,
+            animals: 'chickens'
+          })
+          expect(str).to.equal('I saw 3 chickens')
         })
       })
     })
