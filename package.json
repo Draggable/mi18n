@@ -6,7 +6,6 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --require babel-core/register src/**/*.test.js",
     "test:watch": "yarn test -- --reporter min --watch",
-    "deploy": "now demo --public --token $NOW_TOKEN -A ./now.json",
     "build": "rm -rf dist/ && webpack --env.production --progress",
     "start": "webpack-dev-server --mode development",
     "semantic-release": "semantic-release",

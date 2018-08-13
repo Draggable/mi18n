@@ -13,7 +13,7 @@ before_deploy:
 - now rm demo --token $NOW_TOKEN --yes || true
 deploy:
 - provider: script
-  script: yarn deploy
+  script: now demo --public --token $NOW_TOKEN -A ./now.json
   skip_cleanup: true
   on:
     master: true
