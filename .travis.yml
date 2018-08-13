@@ -10,8 +10,7 @@ notifications:
   email: false
 before_deploy:
 - yarn add now --no-save
-- now rm mi18n --token $NOW_TOKEN --yes || true
-- cp dist/* demo/
+- now rm demo --token $NOW_TOKEN --yes || true
 deploy:
 - provider: script
   script: yarn deploy

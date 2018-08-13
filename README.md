@@ -1,4 +1,4 @@
-# mi18n v0.4.1
+# mi18n
 
 Add multi-lingual support to any JavaScript app or module with this light-weight package.
 
@@ -45,8 +45,8 @@ const i18n = new I18n(i18nOptions)
 ### Example `.lang` file
 
 ```txt
-NATIVE_NAME = Deutsch
-en-US_NAME = German
+de-DE = Deutsch
+en-US = German
 
 addOption = Option hinzufügen
 allFieldsRemoved = Alle Felder wurden entfernt.
