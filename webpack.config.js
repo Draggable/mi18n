@@ -2,21 +2,12 @@ const pkg = require('./package.json')
 const { resolve } = require('path')
 const { BannerPlugin } = require('webpack')
 const CompressionPlugin = require('compression-webpack-plugin')
-const MinifyPlugin = require('babel-minify-webpack-plugin')
-
-const PRODUCTION = process.argv.includes('production')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const bannerTemplate = [`${pkg.name} - ${pkg.homepage}`, `Version: ${pkg.version}`, `Author: ${pkg.author}`].join('\n')
 
 const plugins = [
-  new MinifyPlugin(
-    {
-      removeDebugger: true,
-    },
-    {
-      comments: false,
-    }
-  ),
+  new UglifyJsPlugin(),
   new BannerPlugin(bannerTemplate),
   new CompressionPlugin({
     asset: '[path].gz[query]',
@@ -27,10 +18,8 @@ const plugins = [
   }),
 ]
 
-const devtool = PRODUCTION ? false : 'inline-source-map'
-
-const webpackConfig = {
-  mode: PRODUCTION ? 'production' : 'development',
+const webpackConfig = env => ({
+  mode: env.production ? 'production' : 'development',
   context: resolve(__dirname),
   entry: {
     mi18n: './src/mi18n.js',
@@ -54,7 +43,7 @@ const webpackConfig = {
       },
     ],
   },
-  devtool,
+  devtool: env.production && 'inline-source-map',
   plugins,
   resolve: {
     modules: [resolve(__dirname, 'src'), 'node_modules'],
@@ -65,6 +54,6 @@ const webpackConfig = {
     contentBase: 'demo/',
     noInfo: true,
   },
-}
+})
 
 module.exports = webpackConfig
