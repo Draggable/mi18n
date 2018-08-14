@@ -1,3 +1,10 @@
+## [0.4.4](https://github.com/Draggable/mi18n/compare/v0.4.3...v0.4.4) (2018-08-14)
+
+
+### Bug Fixes
+
+* **npm:** files missing from published npm ([821c570](https://github.com/Draggable/mi18n/commit/821c570))
+
 ## [0.4.3](https://github.com/Draggable/mi18n/compare/v0.4.2...v0.4.3) (2018-08-14)
 
 
