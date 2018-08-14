@@ -1,4 +1,4 @@
-# mi18n
+# mi18n [![Build Status](https://travis-ci.org/Draggable/mi18n.svg?branch=master)](https://travis-ci.org/Draggable/mi18n) [![npm version](https://badge.fury.io/js/mi18n.svg)](https://badge.fury.io/js/mi18n) [![Gitter chat](https://img.shields.io/badge/gitter-chat-ff69b4.svg)](https://gitter.im/Draggable/mi18n)
 
 Add multi-lingual support to any JavaScript app or module with this light-weight package.
 
