@@ -1,3 +1,18 @@
+## [0.4.3](https://github.com/Draggable/mi18n/compare/v0.4.2...v0.4.3) (2018-08-14)
+
+
+### Bug Fixes
+
+* **ci:** build not completing ([7dea86a](https://github.com/Draggable/mi18n/commit/7dea86a))
+* **ci:** do not install travis-deploy-once globally ([90f024d](https://github.com/Draggable/mi18n/commit/90f024d))
+* **ci:** move after_success to get branches tagged and hopefully auto-updated changelog ([ce8d761](https://github.com/Draggable/mi18n/commit/ce8d761))
+* **ci:** Update travis-ci config ([378a072](https://github.com/Draggable/mi18n/commit/378a072))
+* **ci:** Use multiple stages for travis-ci ([e8e43e7](https://github.com/Draggable/mi18n/commit/e8e43e7))
+* **now:** deploy ([31eac82](https://github.com/Draggable/mi18n/commit/31eac82))
+* **semantic-release:** add required semantic-release plugins ([2af43b2](https://github.com/Draggable/mi18n/commit/2af43b2))
+* **webpack:** absolute url no longer needed in webpack, remove unused files, bithound is dead ([0318e10](https://github.com/Draggable/mi18n/commit/0318e10))
+* **webpack:** Update modules and webpack config, add test case for string with vars ([7766316](https://github.com/Draggable/mi18n/commit/7766316))
+
 # mi18n Changelog
 
 - v0.4.3 - Fix now.sh deploy
