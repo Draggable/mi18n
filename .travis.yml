@@ -1,5 +1,6 @@
 language: node_js
-node_js: '9'
+node_js:
+  - '9'
 cache:
   yarn: true
   directories:
@@ -8,10 +9,10 @@ cache:
 notifications:
   email: false
 stages:
-  - lint # this ensures a "user" install works properly
-  - test # warm up cache for default Node.js version
-  - now-deploy # lint code and docs
-  - release # all tests
+  - lint
+  - test
+  - now-deploy
+  - release
 jobs:
   include:
   - stage: lint
