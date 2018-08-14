@@ -1,3 +1,10 @@
+## [0.4.6](https://github.com/Draggable/mi18n/compare/v0.4.5...v0.4.6) (2018-08-14)
+
+
+### Bug Fixes
+
+* **env:** update env vars ([41f2531](https://github.com/Draggable/mi18n/commit/41f2531))
+
 ## [0.4.5](https://github.com/Draggable/mi18n/compare/v0.4.4...v0.4.5) (2018-08-14)
 
 
