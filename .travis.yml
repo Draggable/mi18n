@@ -1,6 +1,10 @@
+stages:
+  - lint
+  - test
+  - now-deploy
+  - release
 language: node_js
-node_js:
-  - '9'
+node_js: '10'
 cache:
   yarn: true
   directories:
@@ -8,17 +12,10 @@ cache:
     - node_modules
 notifications:
   email: false
-stages:
-  - lint
-  - test
-  - now-deploy
-  - release
 jobs:
   include:
   - stage: lint
       script: yarn lint
-  - stage: test
-      script: yarn test
   - stage: now-deploy
     if: branch = master
     before_deploy:
