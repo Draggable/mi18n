@@ -110,5 +110,18 @@
       "require-jsdoc": 1
     }
   },
-  "dependencies": {}
+  "dependencies": {},
+  "release": {
+    "branch": "master",
+    "verifyConditions": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ],
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
+    ]
+  }
 }

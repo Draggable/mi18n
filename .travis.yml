@@ -8,23 +8,20 @@ cache:
   - node_modules
 notifications:
   email: false
-before_deploy:
-- yarn add now --no-save
-- now rm demo --token $NOW_TOKEN --yes || true
-deploy:
-- provider: script
-  script: now demo --public --token $NOW_TOKEN -A ./now.json
-  skip_cleanup: true
-  on:
-    master: true
-- provider: script
-  skip_cleanup: true
-  script: npx travis-deploy-once "npx semantic-release"
-  on:
-    master: true
-branches:
-  except:
-  - "/^v\\d+\\.\\d+\\.\\d+$/"
+jobs:
+  include:
+    - stage: deploy
+      if: branch = master
+      before_deploy:
+        - yarn add now --no-save
+        - now rm demo --token $NOW_TOKEN --yes || true
+      deploy:
+        provider: script
+        script:
+          - now demo --public --token $NOW_TOKEN -A ./now.json
+        skip_cleanup: true
+        after_success:
+          - npx travis-deploy-once "npx semantic-release"
 env:
   global:
   - secure: L0X0b0WGeGh+zrLldLm6EURPjkn8xKiJb0zuDiGNvJ1lbTULUEamcDiHYhjqZQboEUXUBjqRnqVvO1txrB0WHuHrXRhJ//y1xDf+cQwV1MqFDnw7vHXv1P3C2OnRPtejlw7C0U47nhX+9is2pc8lO6lT8KIBwKzKPNoKCsKNMibJc3YxpPWrC4aGmrupxRdPQ2EU9On+o3syYdNeaQYohzYO1oQABEqOYKdxthX4JCpA2PytU4jUGIKCU0ql6Z8J6g2JwZBMttnZX6HxVccKevuoMmH6y/8j93qxaQsWiXJPmalEha8acad+DQ+SdVhAMH0znz/EN6OkGIMHKuwLRxEVsNmpnbp893AMHuxr2RQ/W2oYFw91588MgOCCvoxD8X3ro/ccaFYf6GP9kwOxjIiU8lt6WZQ4McA6AbOe+Qx9HSII/OXM139S09f84TYA2fwcn6XMNc2sr3XtpUUEJ3YvylRA+8tkTSnRYMsuXGV6C4fC1zzGwKhOd18hCG8w5jZ+yDyywQLwzLo+iM5Ry4FQDgmSDToliGVUtc1Hdf5D3YPiUQdGU5Rwx0PRkmhSBEcfUR4yhYlbWgaYLlqWmkxuM+zPB/S/UxmkNf4RR4fPt3Pmn09rV9KwKpMN3ILPZf24oLXA5QpFMmtKQxXNan986JNggD/6uGClT2d/UXY=
