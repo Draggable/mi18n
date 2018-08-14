@@ -1,3 +1,10 @@
+## [0.4.5](https://github.com/Draggable/mi18n/compare/v0.4.4...v0.4.5) (2018-08-14)
+
+
+### Bug Fixes
+
+* **npm:** dist files should be in npm release ([c7c8494](https://github.com/Draggable/mi18n/commit/c7c8494))
+
 ## [0.4.4](https://github.com/Draggable/mi18n/compare/v0.4.3...v0.4.4) (2018-08-14)
 
 
