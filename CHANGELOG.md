@@ -1,3 +1,10 @@
+## [0.4.7](https://github.com/Draggable/mi18n/compare/v0.4.6...v0.4.7) (2018-11-02)
+
+
+### Bug Fixes
+
+* **getValue:** Add reminder to add tests for getValue, hopefulyl trigger a release ([4a7fa02](https://github.com/Draggable/mi18n/commit/4a7fa02))
+
 ## [0.4.6](https://github.com/Draggable/mi18n/compare/v0.4.5...v0.4.6) (2018-08-14)
 
 
