@@ -7,7 +7,7 @@ const DEFAULT_CONFIG = {
   // list of available locales, handy for populating selector.
   langs: ['en-US'],
   locale: 'en-US', // init with user's preferred language
-  override: {},
+  override: {}
 }
 
 /**
@@ -31,11 +31,17 @@ export class I18N {
    * @param {Object} options
    */
   processConfig(options) {
-    const { location, ...restOptions } = Object.assign({}, DEFAULT_CONFIG, options)
+    const { location, ...restOptions } = Object.assign(
+      {},
+      DEFAULT_CONFIG,
+      options
+    )
     const parsedLocation = location.replace(/\/?$/, '/')
     this.config = Object.assign({}, { location: parsedLocation }, restOptions)
-    const {override, preloaded = {}} = this.config
-    const allLangs = Object.entries(this.langs).concat(Object.entries(override || preloaded))
+    const { override, preloaded = {} } = this.config
+    const allLangs = Object.entries(this.langs).concat(
+      Object.entries(override || preloaded)
+    )
     this.langs = allLangs.reduce((acc, [locale, lang]) => {
       acc[locale] = this.applyLanguage.call(this, locale, lang)
       return acc
@@ -67,10 +73,22 @@ export class I18N {
   /**
    * get a string from a loaded language file
    * @param  {String} key  - the key for the string we are trying to retrieve
-   * @return {String}      - correct language string
+   * @param  {String} locale - locale to check for value
+   * @return {String} language string or undefined
    */
-  getValue(key) {
-    return this.current && this.current[key]
+  getValue(key, locale = this.locale) {
+    const value = this.langs[locale] && this.langs[locale][key]
+    return value || this.getFallbackValue(key)
+  }
+
+  /**
+   * Find a language that has desired key
+   * @param {String} key value key
+   * @return {String} found value or undefined
+   */
+  getFallbackValue(key) {
+    const fallbackLang = Object.values(this.langs).find(lang => lang[key])
+    return fallbackLang && fallbackLang[key]
   }
 
   /**
@@ -82,7 +100,7 @@ export class I18N {
     const mapObj = {
       '{': '\\{',
       '}': '\\}',
-      '|': '\\|',
+      '|': '\\|'
     }
 
     str = str.replace(/\{|\}|\|/g, matched => mapObj[matched])
@@ -112,6 +130,7 @@ export class I18N {
     if (!value) {
       return
     }
+
     const tokens = value.match(/\{[^}]+?\}/g)
     let token
 
@@ -170,7 +189,11 @@ export class I18N {
         _this.applyLanguage.call(_this, _this.langs[locale])
         return resolve(_this.langs[locale])
       } else {
-        const langFile = [_this.config.location, locale, _this.config.extension].join('')
+        const langFile = [
+          _this.config.location,
+          locale,
+          _this.config.extension
+        ].join('')
         return fetch(langFile)
           .then(({ data: lang }) => {
             const processedFile = _this.processFile(lang)
@@ -213,12 +236,11 @@ export class I18N {
    * @return {Promise} language
    */
   setCurrent(locale = 'en-US') {
-    return this.loadLang(locale)
-      .then(language => {
-        this.locale = locale
-        this.current = this.langs[locale]
-        return language
-      })
+    return this.loadLang(locale).then(() => {
+      this.locale = locale
+      this.current = this.langs[locale]
+      return this.current
+    })
   }
 }
 
