@@ -1,3 +1,10 @@
+## [0.4.8](https://github.com/Draggable/mi18n/compare/v0.4.7...v0.4.8) (2018-11-05)
+
+
+### Bug Fixes
+
+* **getValue:** Add reminder to add tests for getValue ([#22](https://github.com/Draggable/mi18n/issues/22)) ([f948d9c](https://github.com/Draggable/mi18n/commit/f948d9c))
+
 ## [0.4.7](https://github.com/Draggable/mi18n/compare/v0.4.6...v0.4.7) (2018-11-02)
 
 
