@@ -28,9 +28,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
-      - name: Deploy - https://draggable.github.io/formeo/
-        if: success()
-        env:
-          GH_PAT: ${{ secrets.GH_TOKEN }}
-          BUILD_DIR: dist/demo/
-        uses: maxheld83/ghpages@v0.2.1
