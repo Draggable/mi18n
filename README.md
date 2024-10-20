@@ -36,10 +36,18 @@ const i18nOptions = {
 const i18n = new I18n(i18nOptions)
 ```
 
-... later
+... then in your app
 
 ```jsx
 <label>{i18n.get('addOption')}</label>
+```
+
+### Add a Language after initialization
+
+```javascript
+i18n.addLanguage('fr-FR', {
+  addOption: 'Ajouter une option',
+})
 ```
 
 ### Example `.lang` file
