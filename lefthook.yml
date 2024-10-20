@@ -1,0 +1,16 @@
+pre-push:
+  parallel: true
+  commands:
+    run-tests:
+      run: npm test
+
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      run: npx lint-staged
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit $GIT_PARAMS
