@@ -50,6 +50,12 @@ i18n.addLanguage('fr-FR', {
 })
 ```
 
+### Process a confige file
+
+```javascript
+i18n.processConfig(configFileString)
+```
+
 ### Example `.lang` file
 
 ```txt
