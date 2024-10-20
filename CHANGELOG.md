@@ -1,3 +1,19 @@
+# [1.0.0](https://github.com/Draggable/mi18n/compare/v0.4.8...v1.0.0) (2024-10-20)
+
+
+### chore
+
+* update module ([#23](https://github.com/Draggable/mi18n/issues/23)) ([5541a9f](https://github.com/Draggable/mi18n/commit/5541a9fda5564bd12eff0d9fe1513cfd0039a4e9))
+
+
+### BREAKING CHANGES
+
+* the build outputs have changed
+
+* chore: remove unused files
+
+* chore: update checkout from v2 to v4
+
 ## [0.4.8](https://github.com/Draggable/mi18n/compare/v0.4.7...v0.4.8) (2018-11-05)
 
 

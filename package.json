@@ -1,6 +1,6 @@
 {
   "name": "mi18n",
-  "version": "0.4.8",
+  "version": "1.0.0",
   "description": "A simple yet robust i18n solution for universal JavaScript apps.",
   "main": "dist/mi18n.es.min.js",
   "type": "module",
