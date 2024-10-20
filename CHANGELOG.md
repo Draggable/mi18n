@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Draggable/mi18n/compare/v1.0.0...v1.0.1) (2024-10-20)
+
+
+### Bug Fixes
+
+* remove unused file ([166a63a](https://github.com/Draggable/mi18n/commit/166a63a92d2cef45fbd5e00b89cbea7fc5e87fee))
+
 # [1.0.0](https://github.com/Draggable/mi18n/compare/v0.4.8...v1.0.0) (2024-10-20)
 
 
