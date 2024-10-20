@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/Draggable/mi18n/compare/v1.0.1...v1.0.2) (2024-10-20)
+
+
+### Bug Fixes
+
+* add usage to readme ([20aaca1](https://github.com/Draggable/mi18n/commit/20aaca1b5742c243f006ee60bba5edf8e05e7cc5))
+
 ## [1.0.1](https://github.com/Draggable/mi18n/compare/v1.0.0...v1.0.1) (2024-10-20)
 
 
