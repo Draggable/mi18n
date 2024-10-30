@@ -1,6 +1,3 @@
-import https from 'https'
-import http from 'http'
-
 const defaultOptions = Object.freeze({ method: 'GET', body: '' })
 /**
  * Fetches a resource from the network.
@@ -19,35 +16,18 @@ const defaultOptions = Object.freeze({ method: 'GET', body: '' })
  * @return {function(): Promise<Buffer>} return.arrayBuffer - A function that returns a promise resolving to the body as an ArrayBuffer.
  * @return {function(): Promise<Object>} return.json - A function that returns a promise resolving to the body parsed as JSON.
  */
-export function fetch(url, fetchOptions = {}) {
-  const options = { ...defaultOptions, ...fetchOptions }
-  const handler = url.startsWith('https') ? https : http
 
-  return new Promise((resolve, reject) => {
-    const request = handler.request(url, options, response => {
-      processResponse(response, resolve)
-    })
-
-    request.on('error', error => reject(new Error(error.message)))
-    if (options?.body) request.write(options.body)
-    request.end()
-  })
-}
-
-const processResponse = (response, onEnd) => {
-  const data = []
-  response.on('data', chunk => data.push(chunk))
-  response.on('end', () => {
-    const bodyBuffer = Buffer.concat(data)
-    const result = {
-      ok: response.statusCode >= 200 && response.statusCode < 300,
-      status: response.statusCode,
-      statusText: response.statusMessage,
-      headers: new Map(Object.entries(response.headers)),
-      body: bodyBuffer,
-      arrayBuffer: () => Promise.resolve(bodyBuffer),
-      json: () => Promise.resolve(JSON.parse(bodyBuffer.toString())),
+export async function fetchData(url) {
+  try {
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
-    onEnd(result)
-  })
+    const handler = url.endsWith('.lang') ? 'text' : 'json'
+    const data = await response[handler]()
+    return data
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error)
+    throw error
+  }
 }

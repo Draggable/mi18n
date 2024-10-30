@@ -1,4 +1,4 @@
-import { fetch } from './fetch.js'
+import { fetchData } from './fetch.js'
 
 const DEFAULT_CONFIG = {
   extension: '.lang',
@@ -186,14 +186,15 @@ export class I18N {
         return resolve(_this.langs[locale])
       } else {
         const langFile = [_this.config.location, locale, _this.config.extension].join('')
-        return fetch(langFile)
-          .then(({ data: lang }) => {
-            const processedFile = _this.processFile(lang)
+        return fetchData(langFile)
+          .then(lang => {
+            const processedFile = I18N.processFile(lang)
             _this.applyLanguage(locale, processedFile)
             _this.loaded.push(locale)
             return resolve(_this.langs[locale])
           })
-          .catch(() => {
+          .catch(err => {
+            console.error(err)
             const lang = _this.applyLanguage(locale)
             resolve(lang)
           })
