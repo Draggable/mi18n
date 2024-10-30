@@ -27,9 +27,9 @@ export default defineConfig({
     emptyOutDir: true,
     lib: {
       entry: 'src/mi18n.js',
-      name: 'mi18n',
+      name: 'i18n',
       formats: ['es', 'cjs', 'umd', 'iife'],
-      fileName: format => `mi18n.${format}.min.js`,
+      fileName: format => `i18n.${format}.min.js`,
       outDir: 'dist',
     },
     minify: 'terser',

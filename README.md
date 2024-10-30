@@ -1,4 +1,5 @@
-# mi18n [![npm version](https://badge.fury.io/js/mi18n.svg)](https://badge.fury.io/js/mi18n)
+# i18n ![NPM Version](https://img.shields.io/npm/v/%40draggable%2Fi18n)
+
 
 Add multi-lingual support to any JavaScript app or module with this light-weight package.
 
@@ -15,7 +16,7 @@ Add multi-lingual support to any JavaScript app or module with this light-weight
 ## Usage
 
 ```javascript
-import { I18n } from 'mi18n'
+import { I18n } from '@draggable/i18n'
 
 const i18nOptions = {
   extension: '.lang', // extnsion used by your language files, defaults to ".lang"

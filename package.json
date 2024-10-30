@@ -1,12 +1,15 @@
 {
-  "name": "mi18n",
+  "name": "@draggable/i18n",
   "version": "1.0.3",
   "description": "A simple yet robust i18n solution for universal JavaScript apps.",
-  "main": "dist/mi18n.es.min.js",
+  "main": "dist/i18n.es.min.js",
   "type": "module",
   "files": [
     "dist/"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "node --test src/**/*.test.js",
     "test:watch": "yarn test -- --reporter min --watch",
@@ -18,7 +21,7 @@
     "preview": "vite preview"
   },
   "repository": {
-    "url": "https://github.com/Draggable/mi18n",
+    "url": "https://github.com/Draggable/i18n",
     "type": "git"
   },
   "keywords": [
@@ -34,9 +37,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Draggable/mi18n/issues"
+    "url": "https://github.com/Draggable/i18n/issues"
   },
-  "homepage": "https://github.com/Draggable/mi18n",
+  "homepage": "https://github.com/Draggable/i18n",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@commitlint/cli": "^19.5.0",

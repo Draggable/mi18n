@@ -11,9 +11,9 @@ const DEFAULT_CONFIG = {
 }
 
 /**
- * Main mi18n class
+ * Main i18n class
  * @class I18N
- * @classdesc methods and data store for mi18n
+ * @classdesc methods and data store for i18n
  */
 export class I18N {
   /**
