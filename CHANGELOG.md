@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/Draggable/i18n/compare/v1.0.3...v1.0.4) (2024-10-30)
+
+
+### Bug Fixes
+
+* package name ([f6f7fa4](https://github.com/Draggable/i18n/commit/f6f7fa43f37c5b0b403d21eb02e108c7f80e2a3a))
+
 ## [1.0.3](https://github.com/Draggable/mi18n/compare/v1.0.2...v1.0.3) (2024-10-20)
 
 
