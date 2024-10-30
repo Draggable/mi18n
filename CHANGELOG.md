@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/Draggable/i18n/compare/v1.0.4...v1.0.5) (2024-10-30)
+
+
+### Bug Fixes
+
+* release not generated because of commitlint ([5a909c0](https://github.com/Draggable/i18n/commit/5a909c03b474c83ce9a1ba985d36bb71f4909b6e))
+
 ## [1.0.4](https://github.com/Draggable/i18n/compare/v1.0.3...v1.0.4) (2024-10-30)
 
 
