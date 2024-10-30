@@ -13,10 +13,4 @@ pre-commit:
 commit-msg:
   commands:
     commitlint:
-      run: |
-        # Skip commitlint if running in CI
-        if [ "$CI" == "true" ]; then
-          echo "Skipping commitlint in CI environment."
-          exit 0
-        fi
-        npx commitlint --edit $GIT_PARAMS
+      run: npx commitlint --edit $GIT_PARAMS
