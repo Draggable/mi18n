@@ -15,7 +15,7 @@ commit-msg:
     commitlint:
       run: |
         # Skip commitlint if running in CI
-        if [[ "$CI" == "true" ]]; then
+        if [ "$CI" == "true" ]; then
           echo "Skipping commitlint in CI environment."
           exit 0
         fi
