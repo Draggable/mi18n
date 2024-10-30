@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/Draggable/i18n/compare/v1.0.6...v1.0.7) (2024-10-30)
+
+
+### Bug Fixes
+
+* fetch and apply ([4c2c856](https://github.com/Draggable/i18n/commit/4c2c856db5e335ad883119b64da92dfad0694472))
+
 ## [1.0.6](https://github.com/Draggable/i18n/compare/v1.0.5...v1.0.6) (2024-10-30)
 
 
