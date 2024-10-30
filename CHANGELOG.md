@@ -1,3 +1,12 @@
+## [1.0.6](https://github.com/Draggable/i18n/compare/v1.0.5...v1.0.6) (2024-10-30)
+
+
+### Bug Fixes
+
+* lefthook.yml ([957d471](https://github.com/Draggable/i18n/commit/957d47146a7574fcd9db2989e090bfb52bf2ba20))
+* release not generated because of commitlint ([78d65b9](https://github.com/Draggable/i18n/commit/78d65b992d1c29d7b2d20221723b49725224d35f))
+* release not generated because of commitlint ([c671fb9](https://github.com/Draggable/i18n/commit/c671fb9953989c42969998730d0490b76128434c))
+
 ## [1.0.5](https://github.com/Draggable/i18n/compare/v1.0.4...v1.0.5) (2024-10-30)
 
 
