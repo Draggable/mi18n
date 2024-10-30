@@ -1,5 +1,4 @@
-# i18n ![NPM Version](https://img.shields.io/npm/v/%40draggable%2Fi18n)
-
+# i18n ![NPM Version](https://img.shields.io/npm/v/@draggable/i18n)
 
 Add multi-lingual support to any JavaScript app or module with this light-weight package.
 
